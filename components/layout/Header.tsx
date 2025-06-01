@@ -32,7 +32,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 proseka-card border-b-4">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b-4 border-gradient-to-r from-cyan-400 to-pink-400 shadow-lg">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* ロゴ */}
@@ -40,21 +40,21 @@ export default function Header() {
             href="/" 
             className="text-2xl font-bold text-white hover:opacity-80 transition-opacity"
           >
-            <span className="proseka-title text-3xl">🎵 English Rhythm Academy 🎵</span>
+            <span className="proseka-title text-3xl">🎵 英語リズムアカデミー 🎵</span>
           </Link>
 
           {/* デスクトップナビゲーション */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link 
               href="/" 
-              className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
+              className="text-gray-600 hover:text-cyan-500 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
             >
               <Sparkles className="h-4 w-4" />
               <span className="font-semibold">ホーム</span>
             </Link>
             <Link 
               href="/story-creator" 
-              className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
+              className="text-gray-600 hover:text-cyan-500 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
             >
               <Music className="h-4 w-4" />
               <span className="font-semibold">リズムゲーム</span>
@@ -63,14 +63,14 @@ export default function Header() {
               <>
                 <Link 
                   href="/billing" 
-                  className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
+                  className="text-gray-600 hover:text-cyan-500 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
                 >
                   <CreditCard className="h-4 w-4" />
                   <span className="font-semibold">契約管理</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
+                  className="text-gray-600 hover:text-cyan-500 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
                 >
                   <Power className="h-4 w-4" />
                   <span className="font-semibold">ログアウト</span>
@@ -79,7 +79,7 @@ export default function Header() {
             ) : (
               <Link 
                 href="/login" 
-                className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
+                className="text-gray-600 hover:text-cyan-500 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
               >
                 <User className="h-4 w-4" />
                 <span className="font-semibold">ログイン</span>

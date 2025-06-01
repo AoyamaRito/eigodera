@@ -11,23 +11,23 @@ export default function Home() {
         <div className="proseka-card max-w-6xl mx-auto mb-12">
           <div className="proseka-header">
             <span className="mr-4">● ● ●</span>
-ENGLISH_RHYTHM_ACADEMY_v4.0 - ♫ [PRODUCER@STAGE] ♫
+英語リズムアカデミー v4.0 - ♫ [プロデューサー@ステージ] ♫
           </div>
           <div className="p-8 space-y-4">
             <div className="proseka-text">
-              <span className="text-cyan-400">[PRODUCER]</span> <span className="proseka-title">RHYTHM CONNECTION ESTABLISHED...</span>
+              <span className="text-cyan-500">[プロデューサー]</span> <span className="proseka-title">リズムコネクション確立中...</span>
             </div>
             <div className="proseka-text">
-              <span className="text-pink-400">[MIKU]</span> Welcome, new trainee! Ready to sing in English?
+              <span className="text-pink-500">[ミク]</span> ようこそ、新しい練習生！英語で歌う準備はいい？
             </div>
             <div className="proseka-text">
-              <span className="text-purple-400">[PRODUCER]</span> Your mission: Master English through rhythm games!
+              <span className="text-purple-500">[プロデューサー]</span> あなたのミッション：リズムゲームで英語をマスターしよう！
             </div>
             <div className="proseka-text">
-              <span className="text-yellow-400">[MIKU]</span> Are you ready to hit the perfect note?
+              <span className="text-yellow-500">[ミク]</span> パーフェクトなノートを出す準備はいい？
             </div>
             <div className="talent-text cursor-blink mt-8">
-              <span className="text-cyan-400">[TRAINEE]</span> 
+              <span className="text-cyan-500">[練習生]</span> 
             </div>
           </div>
         </div>
@@ -35,15 +35,15 @@ ENGLISH_RHYTHM_ACADEMY_v4.0 - ♫ [PRODUCER@STAGE] ♫
         <div className="text-center max-w-4xl mx-auto mb-16">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/story-creator">
-              <Button className="bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border-yellow-400 text-black text-lg px-8 py-4 font-semibold">
+              <Button className="bg-gradient-to-r from-cyan-500 to-pink-500 hover:from-cyan-400 hover:to-pink-400 border-none text-white text-lg px-8 py-4 font-semibold shadow-xl">
                 <Music className="mr-2" />
-リズムゲーム開始
+リズムゲームを始める
               </Button>
             </Link>
             <Link href="/login">
-              <Button variant="outline" className="border-yellow-400 text-yellow-400 hover:bg-yellow-900/20 text-lg px-8 py-4 font-semibold">
+              <Button variant="outline" className="border-purple-400 text-purple-600 hover:bg-purple-50 text-lg px-8 py-4 font-semibold">
                 <Sparkles className="mr-2" />
-アカデミー入学
+アカデミーに入学する
               </Button>
             </Link>
           </div>
