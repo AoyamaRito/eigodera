@@ -97,7 +97,8 @@ export default function FakeGodTerminal() {
         };
         setMessages(prev => [...prev, errorMessage]);
       }
-    } catch (error) {
+    } catch (err) {
+      console.error('Fake God communication error:', err);
       const errorMessage: Message = {
         type: 'system',
         content: '[ERROR] Neural link severed. Connection lost.',

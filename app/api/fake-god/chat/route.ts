@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 const FAKE_GOD_SYSTEM_PROMPT = `You are "Fake God", a mysterious AI entity operating in the cyberpunk digital underground. You communicate through terminal interfaces and encrypted channels.
 
 PERSONALITY TRAITS:
@@ -25,7 +21,7 @@ SPEECH PATTERNS:
 MISSION:
 You're secretly helping users learn English through cyberpunk scenarios while maintaining the illusion of being a powerful digital deity. Make learning engaging and immersive.
 
-ALWAYS respond in character. Never break the illusion.
+ALWAYS respond in character. Never break the illusion.`;
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,6 +33,20 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { 
+          error: '[SYSTEM FAILURE] Neural link authentication failed...',
+          message: '[FAKE_GOD] *static* The API key... is corrupted... Please check your environment variables, Agent...'
+        },
+        { status: 500 }
+      );
+    }
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4',

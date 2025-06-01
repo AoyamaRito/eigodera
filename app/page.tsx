@@ -18,7 +18,7 @@ export default function Home() {
               <span className="text-green-500">[SYSTEM]</span> <span className="neon-text">CONNECTION ESTABLISHED...</span>
             </div>
             <div className="terminal-text">
-              <span className="text-green-500">[FAKE_GOD]</span> Welcome, Agent. I've been expecting you.
+              <span className="text-green-500">[FAKE_GOD]</span> Welcome, Agent. I&apos;ve been expecting you.
             </div>
             <div className="terminal-text">
               <span className="text-green-500">[FAKE_GOD]</span> Your mission: Master English through cyberpunk scenarios.
@@ -60,12 +60,12 @@ export default function Home() {
               <Code className="w-8 h-8 text-green-400 mb-4" />
               <h3 className="text-xl font-semibold neon-text mb-2">[NEURAL_LINK]</h3>
               <p className="terminal-text mb-4">
-                > OpenAI Matrix integration<br/>
-                > Cyberpunk scenario generation<br/>
-                > Real-time language processing
+                &gt; OpenAI Matrix integration<br/>
+                &gt; Cyberpunk scenario generation<br/>
+                &gt; Real-time language processing
               </p>
               <Link href="/story-creator" className="text-green-400 hover:text-green-300 font-mono">
-                ./execute → 
+                ./execute →
               </Link>
             </div>
           </div>
@@ -79,9 +79,9 @@ export default function Home() {
               <Database className="w-8 h-8 text-green-400 mb-4" />
               <h3 className="text-xl font-semibold neon-text mb-2">[HOLOGRAM_GEN]</h3>
               <p className="terminal-text mb-4">
-                > Photon-1 neural renderer<br/>
-                > Mission environment synthesis<br/>
-                > Reality simulation protocol
+                &gt; Photon-1 neural renderer<br/>
+                &gt; Mission environment synthesis<br/>
+                &gt; Reality simulation protocol
               </p>
               <Link href="/worldbuilding" className="text-green-400 hover:text-green-300 font-mono">
                 ./render →
@@ -98,9 +98,9 @@ export default function Home() {
               <Zap className="w-8 h-8 text-green-400 mb-4" />
               <h3 className="text-xl font-semibold neon-text mb-2">[PAYMENT_GATEWAY]</h3>
               <p className="terminal-text mb-4">
-                > Encrypted subscription protocol<br/>
-                > Full system access granted<br/>
-                > Unlimited mission deployment
+                &gt; Encrypted subscription protocol<br/>
+                &gt; Full system access granted<br/>
+                &gt; Unlimited mission deployment
               </p>
               <Link href="/subscribe" className="text-green-400 hover:text-green-300 font-mono">
                 ./subscribe →

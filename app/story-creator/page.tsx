@@ -255,7 +255,7 @@ export default function StoryCreatorPage() {
                     Genre
                   </h2>
                   <div className="grid grid-cols-2 gap-2">
-                    {STORY_GENRES.map(g => (
+                    {CYBER_MISSIONS.map(g => (
                       <button
                         key={g.value}
                         onClick={() => setGenre(g.value)}
