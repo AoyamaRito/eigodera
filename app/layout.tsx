@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import Header from "@/components/layout/Header";
+import MatrixBackground from "@/components/MatrixBackground";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +21,9 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${inter.className} antialiased`}>
         <AuthProvider>
+          <MatrixBackground opacity={0.08} speed={80} />
           <Header />
-          <main className="min-h-screen bg-black">
+          <main className="relative min-h-screen bg-black z-10">
             {children}
           </main>
         </AuthProvider>
