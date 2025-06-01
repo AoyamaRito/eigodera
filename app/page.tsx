@@ -15,35 +15,35 @@ STAR_TALENT_AGENCY_v3.0 - [DIRECTOR@STUDIO:~]$
           </div>
           <div className="p-8 space-y-4">
             <div className="talent-text">
-              <span className="text-green-500">[AGENCY]</span> <span className="neon-text">TALENT SCOUT CONNECTION...</span>
+              <span className="text-yellow-500">[AGENCY]</span> <span className="golden-text">TALENT SCOUT CONNECTION...</span>
             </div>
             <div className="talent-text">
-              <span className="text-green-500">[DIRECTOR]</span> Welcome, new talent. Ready for your big break?
+              <span className="text-yellow-500">[DIRECTOR]</span> Welcome, new talent. Ready for your big break?
             </div>
             <div className="talent-text">
-              <span className="text-green-500">[DIRECTOR]</span> Your role: Master English through acting scenarios.
+              <span className="text-yellow-500">[DIRECTOR]</span> Your role: Master English through acting scenarios.
             </div>
             <div className="talent-text">
-              <span className="text-green-500">[DIRECTOR]</span> Are you ready to step into the spotlight?
+              <span className="text-yellow-500">[DIRECTOR]</span> Are you ready to step into the spotlight?
             </div>
             <div className="talent-text cursor-blink mt-8">
-              <span className="text-green-500">[TALENT]</span> 
+              <span className="text-yellow-500">[TALENT]</span> 
             </div>
           </div>
         </div>
-        {/* アクションボタン */)
+        {/* アクションボタン */}
         <div className="text-center max-w-4xl mx-auto mb-16">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/story-creator">
-              <Button className="bg-green-900 hover:bg-green-800 border-green-400 text-green-100 text-lg px-8 py-4 font-mono">
+              <Button className="bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border-yellow-400 text-black text-lg px-8 py-4 font-semibold">
                 <Camera className="mr-2" />
-                ./start_audition.exe
+                オーディション開始
               </Button>
             </Link>
             <Link href="/login">
-              <Button variant="outline" className="border-green-400 text-green-400 hover:bg-green-900 text-lg px-8 py-4 font-mono">
+              <Button variant="outline" className="border-yellow-400 text-yellow-400 hover:bg-yellow-900/20 text-lg px-8 py-4 font-semibold">
                 <Star className="mr-2" />
-                ./join_agency.sh
+                事務所登録
               </Button>
             </Link>
           </div>
