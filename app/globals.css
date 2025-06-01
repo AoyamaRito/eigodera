@@ -21,19 +21,21 @@
     font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     position: relative;
     overflow-x: hidden;
-    background: linear-gradient(135deg, 
-      #FFFFFF 0%, 
-      #F8FAFC 25%, 
-      #F1F5F9 50%, 
-      #E2E8F0 75%, 
-      #F8FAFC 100%
+    background: linear-gradient(180deg, 
+      #F0F9FF 0%, 
+      #E0F2FE 20%, 
+      #FDF2F8 40%, 
+      #F3E8FF 60%, 
+      #FEF3C7 80%, 
+      #ECFDF5 100%
     );
-    animation: proseka-bg-shift 12s ease-in-out infinite;
+    background-size: 100% 200%;
+    animation: proseka-bg-wave 15s ease-in-out infinite;
   }
   
-  @keyframes proseka-bg-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  @keyframes proseka-bg-wave {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 0% 100%; }
   }
   
   @keyframes golden-shimmer {
@@ -108,39 +110,80 @@
 
 @layer utilities {
   .proseka-card {
-    @apply bg-gradient-to-br from-white/90 to-gray-50/90 border-2 shadow-2xl;
-    border-image: linear-gradient(45deg, 
-      var(--miku-cyan), 
-      var(--miku-pink), 
-      var(--miku-purple), 
-      var(--miku-yellow)
-    ) 1;
+    @apply bg-white/80 border-0 shadow-2xl;
+    background: linear-gradient(145deg, 
+      rgba(255, 255, 255, 0.9) 0%, 
+      rgba(240, 249, 255, 0.8) 50%, 
+      rgba(255, 255, 255, 0.9) 100%
+    );
     box-shadow: 
-      0 8px 32px rgba(57, 197, 187, 0.15),
-      0 16px 64px rgba(255, 107, 157, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      0 20px 40px rgba(57, 197, 187, 0.1),
+      0 8px 16px rgba(255, 107, 157, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      0 0 0 1px rgba(57, 197, 187, 0.2);
     backdrop-filter: blur(20px);
-    border-radius: 24px;
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .proseka-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(57, 197, 187, 0.1), 
+      transparent
+    );
+    animation: proseka-shine 3s ease-in-out infinite;
+  }
+  
+  @keyframes proseka-shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
   }
   
   .proseka-header {
-    @apply text-white px-6 py-4 font-bold text-lg;
+    @apply text-white px-8 py-6 font-bold text-xl;
     background: linear-gradient(135deg, 
-      var(--miku-cyan) 0%, 
-      var(--miku-pink) 25%, 
-      var(--miku-purple) 50%, 
-      var(--miku-yellow) 75%, 
-      var(--miku-orange) 100%
+      #39C5BB 0%, 
+      #FF6B9D 25%, 
+      #B794F6 50%, 
+      #F6E05E 75%, 
+      #FF9F40 100%
     );
-    background-size: 200% 200%;
-    animation: proseka-rainbow 3s ease-in-out infinite;
+    background-size: 300% 300%;
+    animation: proseka-rainbow 4s ease-in-out infinite;
     font-family: 'Fredoka', cursive;
-    border-radius: 20px 20px 0 0;
+    border-radius: 32px 32px 0 0;
+    box-shadow: 0 4px 20px rgba(57, 197, 187, 0.3);
+    position: relative;
+  }
+  
+  .proseka-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.2) 0%, 
+      transparent 50%, 
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    border-radius: 32px 32px 0 0;
   }
   
   @keyframes proseka-rainbow {
     0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    25% { background-position: 100% 0%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
   }
   
   .proseka-text {
@@ -157,18 +200,25 @@
   
   .proseka-title {
     background: linear-gradient(45deg, 
-      var(--miku-cyan), 
-      var(--miku-pink), 
-      var(--miku-purple), 
-      var(--miku-yellow)
+      #39C5BB 0%, 
+      #FF6B9D 25%, 
+      #B794F6 50%, 
+      #F6E05E 75%, 
+      #FF9F40 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: proseka-glow 4s ease-in-out infinite;
+    animation: proseka-text-rainbow 3s ease-in-out infinite;
     font-family: 'Fredoka', cursive;
-    font-weight: 700;
-    background-size: 200% 200%;
+    font-weight: 800;
+    background-size: 300% 300%;
+    filter: drop-shadow(0 2px 4px rgba(57, 197, 187, 0.2));
+  }
+  
+  @keyframes proseka-text-rainbow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
   }
   
   .matrix-bg {

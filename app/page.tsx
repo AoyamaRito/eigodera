@@ -7,8 +7,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black matrix-bg">
       <div className="container mx-auto px-4 py-16">
-        {/* リズムゲーム・ヒーロー */}
-        <div className="proseka-card max-w-6xl mx-auto mb-12">
+        {/* メインビジュアル */}
+        <div className="proseka-card max-w-7xl mx-auto mb-16 relative overflow-hidden">
           <div className="proseka-header">
             <span className="mr-4">● ● ●</span>
 英語リズムアカデミー v4.0 - ♫ [プロデューサー@ステージ] ♫
@@ -31,17 +31,17 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* アクションボタン */}
-        <div className="text-center max-w-4xl mx-auto mb-16">
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        {/* メインアクション */}
+        <div className="text-center max-w-5xl mx-auto mb-20">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link href="/story-creator">
-              <Button className="bg-gradient-to-r from-cyan-500 to-pink-500 hover:from-cyan-400 hover:to-pink-400 border-none text-white text-lg px-8 py-4 font-semibold shadow-xl">
+              <Button className="bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:from-cyan-400 hover:via-purple-400 hover:to-pink-400 border-none text-white text-xl px-12 py-6 font-bold shadow-2xl transform hover:scale-105 transition-all duration-300">
                 <Music className="mr-2" />
 リズムゲームを始める
               </Button>
             </Link>
             <Link href="/login">
-              <Button variant="outline" className="border-purple-400 text-purple-600 hover:bg-purple-50 text-lg px-8 py-4 font-semibold">
+              <Button variant="outline" className="border-2 border-purple-400 text-purple-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 text-xl px-12 py-6 font-bold shadow-lg transform hover:scale-105 transition-all duration-300">
                 <Sparkles className="mr-2" />
 アカデミーに入学する
               </Button>
@@ -49,8 +49,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 芸能事務所システム情報 */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {/* 機能紹介セクション */}
+        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
           <div className="proseka-card">
             <div className="proseka-header">
               <Music className="w-4 h-4 inline mr-2" />
@@ -58,13 +58,13 @@ export default function Home() {
             </div>
             <div className="p-6">
               <Sparkles className="w-8 h-8 text-cyan-400 mb-4" />
-              <h3 className="text-xl font-semibold proseka-title mb-2">[音楽コーチAI]</h3>
+              <h3 className="text-2xl font-bold proseka-title mb-4">音楽コーチAI</h3>
               <p className="proseka-text mb-4">
                 &gt; AI音楽コーチ連携<br/>
                 &gt; リズムゲーム自動生成<br/>
                 &gt; リアルタイム歌唱指導
               </p>
-              <Link href="/story-creator" className="text-cyan-400 hover:text-pink-300 font-semibold">
+              <Link href="/story-creator" className="inline-block bg-gradient-to-r from-cyan-400 to-blue-500 text-white px-6 py-3 rounded-full font-bold hover:from-cyan-300 hover:to-blue-400 transform hover:scale-105 transition-all duration-300 shadow-lg">
                 ♫ スタート ♫
               </Link>
             </div>
