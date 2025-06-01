@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { PenSquare, User, Home, Menu, X, LogOut, CreditCard } from 'lucide-react';
+import { Terminal, User, Database, Menu, X, Power, CreditCard } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
@@ -32,7 +32,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-black/30 border-b border-white/10">
+    <header className="sticky top-0 z-50 bg-black border-b-2 border-green-400 terminal-window">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* ロゴ */}
@@ -40,7 +40,7 @@ export default function Header() {
             href="/" 
             className="text-2xl font-bold text-white hover:opacity-80 transition-opacity"
           >
-            AI Platform
+            <span className="neon-text font-mono">[FAKE_GOD_TERMINAL]</span>
           </Link>
 
           {/* デスクトップナビゲーション */}
@@ -49,15 +49,15 @@ export default function Header() {
               href="/" 
               className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
             >
-              <Home className="h-4 w-4" />
-              <span>ホーム</span>
+              <Database className="h-4 w-4" />
+              <span className="font-mono">./home</span>
             </Link>
             <Link 
               href="/story-creator" 
               className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
             >
-              <PenSquare className="h-4 w-4" />
-              <span>作成</span>
+              <Terminal className="h-4 w-4" />
+              <span className="font-mono">./mission</span>
             </Link>
             {userId ? (
               <>
@@ -66,14 +66,14 @@ export default function Header() {
                   className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
                 >
                   <CreditCard className="h-4 w-4" />
-                  <span>料金</span>
+                  <span className="font-mono">./contract</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
                 >
-                  <LogOut className="h-4 w-4" />
-                  <span>ログアウト</span>
+                  <Power className="h-4 w-4" />
+                  <span className="font-mono">./logout</span>
                 </button>
               </>
             ) : (
@@ -82,7 +82,7 @@ export default function Header() {
                 className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
               >
                 <User className="h-4 w-4" />
-                <span>ログイン</span>
+                <span className="font-mono">./login</span>
               </Link>
             )}
           </nav>
@@ -104,16 +104,16 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
             >
-              <Home className="h-4 w-4" />
-              <span>ホーム</span>
+              <Database className="h-4 w-4" />
+              <span className="font-mono">./home</span>
             </Link>
             <Link 
               href="/story-creator" 
               onClick={() => setIsMobileMenuOpen(false)}
               className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
             >
-              <PenSquare className="h-4 w-4" />
-              <span>作成</span>
+              <Terminal className="h-4 w-4" />
+              <span className="font-mono">./mission</span>
             </Link>
             {userId ? (
               <>
@@ -123,14 +123,14 @@ export default function Header() {
                   className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
                 >
                   <CreditCard className="h-4 w-4" />
-                  <span>料金</span>
+                  <span className="font-mono">./contract</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full text-left text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
                 >
-                  <LogOut className="h-4 w-4" />
-                  <span>ログアウト</span>
+                  <Power className="h-4 w-4" />
+                  <span className="font-mono">./logout</span>
                 </button>
               </>
             ) : (
@@ -140,7 +140,7 @@ export default function Header() {
                 className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
               >
                 <User className="h-4 w-4" />
-                <span>ログイン</span>
+                <span className="font-mono">./login</span>
               </Link>
             )}
           </nav>

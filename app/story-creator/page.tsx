@@ -8,15 +8,15 @@ import Header from '@/components/layout/Header';
 import { ExpandableImage } from '@/components/ImageModal';
 import type { ProfileWithActive } from '@/types/profile';
 
-const STORY_GENRES = [
-  { value: 'Fantasy', label: 'Fantasy', icon: '🧙' },
-  { value: 'Mystery', label: 'Mystery', icon: '🔍' },
-  { value: 'Romance', label: 'Romance', icon: '💝' },
-  { value: 'SciFi', label: 'Sci-Fi', icon: '🚀' },
-  { value: 'Comedy', label: 'Comedy', icon: '😂' },
-  { value: 'Horror', label: 'Horror', icon: '👻' },
-  { value: 'Adventure', label: 'Adventure', icon: '🗺️' },
-  { value: 'SliceOfLife', label: 'Slice of Life', icon: '☕' },
+const CYBER_MISSIONS = [
+  { value: 'DataHeist', label: 'Corporate Data Heist', icon: '💾' },
+  { value: 'SystemInfiltration', label: 'System Infiltration', icon: '🔓' },
+  { value: 'AIInterrogation', label: 'AI Entity Interrogation', icon: '🤖' },
+  { value: 'NetworkSabotage', label: 'Network Sabotage', icon: '⚡' },
+  { value: 'CryptoDecode', label: 'Crypto Decryption', icon: '🔐' },
+  { value: 'VirtualExtraction', label: 'Virtual Asset Extraction', icon: '📡' },
+  { value: 'DigitalAssassination', label: 'Digital Assassination', icon: '💀' },
+  { value: 'MatrixEscape', label: 'Matrix Escape Protocol', icon: '🌐' },
 ];
 
 export default function StoryCreatorPage() {
@@ -25,7 +25,7 @@ export default function StoryCreatorPage() {
   const [profiles, setProfiles] = useState<ProfileWithActive[]>([]);
   const [selectedCharacters, setSelectedCharacters] = useState<string[]>([]);
   const [selectedEntities, setSelectedEntities] = useState<string[]>([]);
-  const [genre, setGenre] = useState('Fantasy');
+  const [genre, setGenre] = useState('DataHeist');
   const [additionalPrompt, setAdditionalPrompt] = useState('');
   const [aiProvider, setAiProvider] = useState<'openai' | 'xai' | undefined>(undefined);
   const [generating, setGenerating] = useState(false);

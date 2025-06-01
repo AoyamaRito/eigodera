@@ -7,8 +7,8 @@ import Header from "@/components/layout/Header";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI創作プラットフォーム",
-  description: "AIを活用した画像・ストーリー生成プラットフォーム",
+  title: "AI英会話エージェント",
+  description: "スパイ映画の世界観で英語を学ぶAI英会話プラットフォーム。秘密エージェントとして様々なミッションを通じて英語スキルを磨き上げましょう。",
 };
 
 export default function RootLayout({
@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <AuthProvider>
           <Header />
-          <main className="min-h-screen bg-slate-900">
+          <main className="min-h-screen bg-black">
             {children}
           </main>
         </AuthProvider>
