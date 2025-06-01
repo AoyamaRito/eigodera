@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { Terminal, User, Database, Menu, X, Power, CreditCard } from 'lucide-react';
+import { Camera, User, Star, Menu, X, Power, CreditCard } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
@@ -40,7 +40,7 @@ export default function Header() {
             href="/" 
             className="text-2xl font-bold text-white hover:opacity-80 transition-opacity"
           >
-            <span className="neon-text font-mono">[FAKE_GOD_TERMINAL]</span>
+            <span className="neon-text font-mono">★ Actor&Actress Agency ★</span>
           </Link>
 
           {/* デスクトップナビゲーション */}
@@ -49,15 +49,15 @@ export default function Header() {
               href="/" 
               className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
             >
-              <Database className="h-4 w-4" />
-              <span className="font-mono">./home</span>
+              <Star className="h-4 w-4" />
+              <span className="font-mono">ホーム</span>
             </Link>
             <Link 
               href="/story-creator" 
               className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
             >
-              <Terminal className="h-4 w-4" />
-              <span className="font-mono">./mission</span>
+              <Camera className="h-4 w-4" />
+              <span className="font-mono">オーディション</span>
             </Link>
             {userId ? (
               <>
@@ -66,14 +66,14 @@ export default function Header() {
                   className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
                 >
                   <CreditCard className="h-4 w-4" />
-                  <span className="font-mono">./contract</span>
+                  <span className="font-mono">契約管理</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
                 >
                   <Power className="h-4 w-4" />
-                  <span className="font-mono">./logout</span>
+                  <span className="font-mono">ログアウト</span>
                 </button>
               </>
             ) : (
@@ -82,7 +82,7 @@ export default function Header() {
                 className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
               >
                 <User className="h-4 w-4" />
-                <span className="font-mono">./login</span>
+                <span className="font-mono">ログイン</span>
               </Link>
             )}
           </nav>
@@ -104,16 +104,16 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
             >
-              <Database className="h-4 w-4" />
-              <span className="font-mono">./home</span>
+              <Star className="h-4 w-4" />
+              <span className="font-mono">ホーム</span>
             </Link>
             <Link 
               href="/story-creator" 
               onClick={() => setIsMobileMenuOpen(false)}
               className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
             >
-              <Terminal className="h-4 w-4" />
-              <span className="font-mono">./mission</span>
+              <Camera className="h-4 w-4" />
+              <span className="font-mono">オーディション</span>
             </Link>
             {userId ? (
               <>
@@ -123,14 +123,14 @@ export default function Header() {
                   className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
                 >
                   <CreditCard className="h-4 w-4" />
-                  <span className="font-mono">./contract</span>
+                  <span className="font-mono">契約管理</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full text-left text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
                 >
                   <Power className="h-4 w-4" />
-                  <span className="font-mono">./logout</span>
+                  <span className="font-mono">ログアウト</span>
                 </button>
               </>
             ) : (
@@ -140,7 +140,7 @@ export default function Header() {
                 className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
               >
                 <User className="h-4 w-4" />
-                <span className="font-mono">./login</span>
+                <span className="font-mono">ログイン</span>
               </Link>
             )}
           </nav>

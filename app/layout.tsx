@@ -8,8 +8,8 @@ import MatrixBackground from "@/components/MatrixBackground";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI英会話エージェント",
-  description: "スパイ映画の世界観で英語を学ぶAI英会話プラットフォーム。秘密エージェントとして様々なミッションを通じて英語スキルを磨き上げましょう。",
+  title: "AI英会話 Actor&Actress",
+  description: "芸能事務所のカバーを持つスパイ組織で英語を学ぶAI英会話プラットフォーム。俳優・女優として様々な役柄を演じながら英語スキルを磨き上げましょう。",
 };
 
 export default function RootLayout({
