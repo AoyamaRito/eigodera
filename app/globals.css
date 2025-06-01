@@ -4,22 +4,36 @@
 
 @layer base {
   :root {
-    --agency-gold: #FFD700;
-    --agency-gold-bright: #FFF700;
-    --agency-gold-dim: #B8860B;
-    --agency-gold-dark: #8B7355;
-    --agency-bg: #000000;
-    --agency-accent: rgba(255, 215, 0, 0.1);
+    --miku-cyan: #39C5BB;
+    --miku-pink: #FF6B9D;
+    --miku-purple: #B794F6;
+    --miku-yellow: #F6E05E;
+    --miku-orange: #FF9F40;
+    --proseka-bg: #0A0F1C;
+    --proseka-card: #1A2332;
+    --proseka-accent: rgba(57, 197, 187, 0.2);
   }
   
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka:wght@300;400;500;600&display=swap');
   
   body {
-    @apply bg-black text-amber-100 min-h-screen;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    @apply text-white min-h-screen;
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     position: relative;
     overflow-x: hidden;
-    background: radial-gradient(ellipse at center, #1a1a1a 0%, #000000 100%);
+    background: linear-gradient(135deg, 
+      #0A0F1C 0%, 
+      #1A2332 25%, 
+      #0F1B2A 50%, 
+      #1E2A3A 75%, 
+      #0A0F1C 100%
+    );
+    animation: proseka-bg-shift 8s ease-in-out infinite;
+  }
+  
+  @keyframes proseka-bg-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
   }
   
   @keyframes golden-shimmer {
@@ -35,18 +49,19 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(
-      circle at 20% 80%,
-      rgba(255, 215, 0, 0.05) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(255, 215, 0, 0.05) 0%,
-      transparent 50%
-    );
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(57, 197, 187, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 40%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(183, 148, 246, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 90% 90%, rgba(246, 224, 94, 0.1) 0%, transparent 50%);
     pointer-events: none;
     z-index: 1;
+    animation: proseka-lights 6s ease-in-out infinite;
+  }
+  
+  @keyframes proseka-lights {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
   }
   
   @keyframes terminal-blink {
@@ -61,20 +76,27 @@
     100% { transform: translateY(100vh); opacity: 0; }
   }
   
-  @keyframes golden-glow {
+  @keyframes proseka-glow {
     0%, 100% { 
       text-shadow: 
-        0 0 5px var(--agency-gold),
-        0 0 10px var(--agency-gold),
-        0 0 15px var(--agency-gold),
-        0 0 20px var(--agency-gold);
+        0 0 5px var(--miku-cyan),
+        0 0 10px var(--miku-pink),
+        0 0 15px var(--miku-purple),
+        0 0 20px var(--miku-cyan);
     }
-    50% { 
+    33% { 
       text-shadow: 
-        0 0 10px var(--agency-gold-bright),
-        0 0 20px var(--agency-gold-bright),
-        0 0 30px var(--agency-gold-bright),
-        0 0 40px var(--agency-gold-bright);
+        0 0 8px var(--miku-pink),
+        0 0 15px var(--miku-purple),
+        0 0 25px var(--miku-yellow),
+        0 0 35px var(--miku-orange);
+    }
+    66% { 
+      text-shadow: 
+        0 0 6px var(--miku-purple),
+        0 0 12px var(--miku-cyan),
+        0 0 20px var(--miku-pink),
+        0 0 30px var(--miku-yellow);
     }
   }
   
@@ -85,23 +107,46 @@
 }
 
 @layer utilities {
-  .talent-card {
-    @apply bg-gradient-to-br from-gray-900 to-black border-2 border-yellow-400 shadow-xl;
+  .proseka-card {
+    @apply bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-2 shadow-2xl;
+    border-image: linear-gradient(45deg, 
+      var(--miku-cyan), 
+      var(--miku-pink), 
+      var(--miku-purple), 
+      var(--miku-yellow)
+    ) 1;
     box-shadow: 
-      0 0 30px rgba(255, 215, 0, 0.4),
-      inset 0 0 20px rgba(255, 215, 0, 0.1);
-    backdrop-filter: blur(10px);
+      0 0 30px rgba(57, 197, 187, 0.3),
+      0 0 60px rgba(255, 107, 157, 0.2),
+      inset 0 0 20px rgba(183, 148, 246, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
   }
   
-  .talent-header {
-    @apply bg-gradient-to-r from-yellow-600 to-yellow-400 text-black px-6 py-3 font-semibold;
-    background: linear-gradient(90deg, #B8860B 0%, #FFD700 50%, #B8860B 100%);
-    font-family: 'Playfair Display', serif;
+  .proseka-header {
+    @apply text-white px-6 py-4 font-bold text-lg;
+    background: linear-gradient(135deg, 
+      var(--miku-cyan) 0%, 
+      var(--miku-pink) 25%, 
+      var(--miku-purple) 50%, 
+      var(--miku-yellow) 75%, 
+      var(--miku-orange) 100%
+    );
+    background-size: 200% 200%;
+    animation: proseka-rainbow 3s ease-in-out infinite;
+    font-family: 'Fredoka', cursive;
+    border-radius: 20px 20px 0 0;
   }
   
-  .talent-text {
-    @apply text-amber-100 leading-relaxed;
-    font-family: 'Inter', sans-serif;
+  @keyframes proseka-rainbow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  .proseka-text {
+    @apply text-slate-100 leading-relaxed;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 500;
   }
   
   .cursor-blink::after {
@@ -110,11 +155,20 @@
     @apply text-green-400;
   }
   
-  .golden-text {
-    @apply text-yellow-400;
-    animation: golden-glow 3s ease-in-out infinite alternate;
-    font-family: 'Playfair Display', serif;
+  .proseka-title {
+    background: linear-gradient(45deg, 
+      var(--miku-cyan), 
+      var(--miku-pink), 
+      var(--miku-purple), 
+      var(--miku-yellow)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: proseka-glow 4s ease-in-out infinite;
+    font-family: 'Fredoka', cursive;
     font-weight: 700;
+    background-size: 200% 200%;
   }
   
   .matrix-bg {

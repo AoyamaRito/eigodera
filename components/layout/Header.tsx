@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { Camera, User, Star, Menu, X, Power, CreditCard } from 'lucide-react';
+import { Music, User, Sparkles, Menu, X, Power, CreditCard } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
@@ -32,7 +32,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-black via-gray-900 to-black border-b-2 border-yellow-400 talent-card">
+    <header className="sticky top-0 z-50 proseka-card border-b-4">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* ロゴ */}
@@ -40,37 +40,37 @@ export default function Header() {
             href="/" 
             className="text-2xl font-bold text-white hover:opacity-80 transition-opacity"
           >
-            <span className="golden-text text-3xl">✨ Actor&Actress Agency ✨</span>
+            <span className="proseka-title text-3xl">🎵 English Rhythm Academy 🎵</span>
           </Link>
 
           {/* デスクトップナビゲーション */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link 
               href="/" 
-              className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
+              className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
             >
-              <Star className="h-4 w-4" />
+              <Sparkles className="h-4 w-4" />
               <span className="font-semibold">ホーム</span>
             </Link>
             <Link 
               href="/story-creator" 
-              className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
+              className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
             >
-              <Camera className="h-4 w-4" />
-              <span className="font-semibold">オーディション</span>
+              <Music className="h-4 w-4" />
+              <span className="font-semibold">リズムゲーム</span>
             </Link>
             {userId ? (
               <>
                 <Link 
                   href="/billing" 
-                  className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
+                  className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
                 >
                   <CreditCard className="h-4 w-4" />
                   <span className="font-semibold">契約管理</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
+                  className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
                 >
                   <Power className="h-4 w-4" />
                   <span className="font-semibold">ログアウト</span>
@@ -79,7 +79,7 @@ export default function Header() {
             ) : (
               <Link 
                 href="/login" 
-                className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
+                className="text-cyan-200 hover:text-pink-300 transition-all duration-300 flex items-center space-x-2 hover:scale-105"
               >
                 <User className="h-4 w-4" />
                 <span className="font-semibold">ログイン</span>
@@ -104,7 +104,7 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
             >
-              <Star className="h-4 w-4" />
+              <Sparkles className="h-4 w-4" />
               <span className="font-semibold">ホーム</span>
             </Link>
             <Link 
@@ -112,8 +112,8 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
             >
-              <Camera className="h-4 w-4" />
-              <span className="font-semibold">オーディション</span>
+              <Music className="h-4 w-4" />
+              <span className="font-semibold">リズムゲーム</span>
             </Link>
             {userId ? (
               <>
