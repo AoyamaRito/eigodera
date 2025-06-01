@@ -32,7 +32,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-black border-b-2 border-green-400 terminal-window">
+    <header className="sticky top-0 z-50 bg-gradient-to-r from-black via-gray-900 to-black border-b-2 border-yellow-400 talent-card">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* ロゴ */}
@@ -40,49 +40,49 @@ export default function Header() {
             href="/" 
             className="text-2xl font-bold text-white hover:opacity-80 transition-opacity"
           >
-            <span className="neon-text font-mono">★ Actor&Actress Agency ★</span>
+            <span className="golden-text text-3xl">✨ Actor&Actress Agency ✨</span>
           </Link>
 
           {/* デスクトップナビゲーション */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link 
               href="/" 
-              className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
+              className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
             >
               <Star className="h-4 w-4" />
-              <span className="font-mono">ホーム</span>
+              <span className="font-semibold">ホーム</span>
             </Link>
             <Link 
               href="/story-creator" 
-              className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
+              className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
             >
               <Camera className="h-4 w-4" />
-              <span className="font-mono">オーディション</span>
+              <span className="font-semibold">オーディション</span>
             </Link>
             {userId ? (
               <>
                 <Link 
                   href="/billing" 
-                  className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
+                  className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
                 >
                   <CreditCard className="h-4 w-4" />
-                  <span className="font-mono">契約管理</span>
+                  <span className="font-semibold">契約管理</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
+                  className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
                 >
                   <Power className="h-4 w-4" />
-                  <span className="font-mono">ログアウト</span>
+                  <span className="font-semibold">ログアウト</span>
                 </button>
               </>
             ) : (
               <Link 
                 href="/login" 
-                className="text-gray-300 hover:text-white transition-colors flex items-center space-x-2"
+                className="text-amber-200 hover:text-yellow-400 transition-colors flex items-center space-x-2"
               >
                 <User className="h-4 w-4" />
-                <span className="font-mono">ログイン</span>
+                <span className="font-semibold">ログイン</span>
               </Link>
             )}
           </nav>
@@ -105,7 +105,7 @@ export default function Header() {
               className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
             >
               <Star className="h-4 w-4" />
-              <span className="font-mono">ホーム</span>
+              <span className="font-semibold">ホーム</span>
             </Link>
             <Link 
               href="/story-creator" 
@@ -113,7 +113,7 @@ export default function Header() {
               className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
             >
               <Camera className="h-4 w-4" />
-              <span className="font-mono">オーディション</span>
+              <span className="font-semibold">オーディション</span>
             </Link>
             {userId ? (
               <>
@@ -123,14 +123,14 @@ export default function Header() {
                   className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
                 >
                   <CreditCard className="h-4 w-4" />
-                  <span className="font-mono">契約管理</span>
+                  <span className="font-semibold">契約管理</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full text-left text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
                 >
                   <Power className="h-4 w-4" />
-                  <span className="font-mono">ログアウト</span>
+                  <span className="font-semibold">ログアウト</span>
                 </button>
               </>
             ) : (
@@ -140,7 +140,7 @@ export default function Header() {
                 className="block text-gray-300 hover:text-white transition-colors flex items-center space-x-2 px-2 py-1"
               >
                 <User className="h-4 w-4" />
-                <span className="font-mono">ログイン</span>
+                <span className="font-semibold">ログイン</span>
               </Link>
             )}
           </nav>

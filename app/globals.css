@@ -4,35 +4,28 @@
 
 @layer base {
   :root {
-    --terminal-green: #00ff41;
-    --terminal-bright: #66ff66;
-    --terminal-dim: #00cc33;
-    --terminal-dark: #003311;
-    --matrix-bg: #000000;
-    --scan-line: rgba(0, 255, 65, 0.1);
+    --agency-gold: #FFD700;
+    --agency-gold-bright: #FFF700;
+    --agency-gold-dim: #B8860B;
+    --agency-gold-dark: #8B7355;
+    --agency-bg: #000000;
+    --agency-accent: rgba(255, 215, 0, 0.1);
   }
   
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
   
   body {
-    @apply bg-black text-green-400 min-h-screen;
-    font-family: 'Share Tech Mono', 'Courier New', monospace;
+    @apply bg-black text-amber-100 min-h-screen;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     position: relative;
     overflow-x: hidden;
-    background-image: 
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 255, 65, 0.03) 2px,
-        rgba(0, 255, 65, 0.03) 4px
-      );
-    animation: screen-flicker 0.15s infinite linear alternate;
+    background: radial-gradient(ellipse at center, #1a1a1a 0%, #000000 100%);
   }
   
-  @keyframes screen-flicker {
-    0% { opacity: 0.98; }
-    100% { opacity: 1; }
+  @keyframes golden-shimmer {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.3; }
   }
   
   body::before {
@@ -42,12 +35,16 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      90deg,
-      transparent 50%,
-      rgba(0, 255, 65, 0.02) 50%
+    background: radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 215, 0, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 215, 0, 0.05) 0%,
+      transparent 50%
     );
-    background-size: 4px 4px;
     pointer-events: none;
     z-index: 1;
   }
@@ -64,20 +61,20 @@
     100% { transform: translateY(100vh); opacity: 0; }
   }
   
-  @keyframes neon-glow {
+  @keyframes golden-glow {
     0%, 100% { 
       text-shadow: 
-        0 0 5px var(--terminal-green),
-        0 0 10px var(--terminal-green),
-        0 0 15px var(--terminal-green),
-        0 0 20px var(--terminal-green);
+        0 0 5px var(--agency-gold),
+        0 0 10px var(--agency-gold),
+        0 0 15px var(--agency-gold),
+        0 0 20px var(--agency-gold);
     }
     50% { 
       text-shadow: 
-        0 0 10px var(--terminal-bright),
-        0 0 20px var(--terminal-bright),
-        0 0 30px var(--terminal-bright),
-        0 0 40px var(--terminal-bright);
+        0 0 10px var(--agency-gold-bright),
+        0 0 20px var(--agency-gold-bright),
+        0 0 30px var(--agency-gold-bright),
+        0 0 40px var(--agency-gold-bright);
     }
   }
   
@@ -88,20 +85,23 @@
 }
 
 @layer utilities {
-  .terminal-window {
-    @apply bg-black border-2 border-green-400 shadow-lg;
+  .talent-card {
+    @apply bg-gradient-to-br from-gray-900 to-black border-2 border-yellow-400 shadow-xl;
     box-shadow: 
-      0 0 20px rgba(0, 255, 65, 0.3),
-      inset 0 0 20px rgba(0, 255, 65, 0.1);
+      0 0 30px rgba(255, 215, 0, 0.4),
+      inset 0 0 20px rgba(255, 215, 0, 0.1);
+    backdrop-filter: blur(10px);
   }
   
-  .terminal-header {
-    @apply bg-green-900 text-green-100 px-4 py-2 text-sm;
-    background: linear-gradient(90deg, #003311 0%, #00cc33 50%, #003311 100%);
+  .talent-header {
+    @apply bg-gradient-to-r from-yellow-600 to-yellow-400 text-black px-6 py-3 font-semibold;
+    background: linear-gradient(90deg, #B8860B 0%, #FFD700 50%, #B8860B 100%);
+    font-family: 'Playfair Display', serif;
   }
   
-  .terminal-text {
-    @apply text-green-400 font-mono leading-relaxed;
+  .talent-text {
+    @apply text-amber-100 leading-relaxed;
+    font-family: 'Inter', sans-serif;
   }
   
   .cursor-blink::after {
@@ -110,9 +110,11 @@
     @apply text-green-400;
   }
   
-  .neon-text {
-    @apply text-green-400;
-    animation: neon-glow 2s ease-in-out infinite alternate;
+  .golden-text {
+    @apply text-yellow-400;
+    animation: golden-glow 3s ease-in-out infinite alternate;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
   }
   
   .matrix-bg {

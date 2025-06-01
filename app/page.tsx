@@ -7,31 +7,31 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black matrix-bg">
       <div className="container mx-auto px-4 py-16">
-        {/* ターミナルヒーロー */}
-        <div className="terminal-window max-w-6xl mx-auto mb-12">
-          <div className="terminal-header">
+        {/* スター・ヒーロー */}
+        <div className="talent-card max-w-6xl mx-auto mb-12">
+          <div className="talent-header">
             <span className="mr-4">● ● ●</span>
 STAR_TALENT_AGENCY_v3.0 - [DIRECTOR@STUDIO:~]$
           </div>
           <div className="p-8 space-y-4">
-            <div className="terminal-text">
+            <div className="talent-text">
               <span className="text-green-500">[AGENCY]</span> <span className="neon-text">TALENT SCOUT CONNECTION...</span>
             </div>
-            <div className="terminal-text">
+            <div className="talent-text">
               <span className="text-green-500">[DIRECTOR]</span> Welcome, new talent. Ready for your big break?
             </div>
-            <div className="terminal-text">
+            <div className="talent-text">
               <span className="text-green-500">[DIRECTOR]</span> Your role: Master English through acting scenarios.
             </div>
-            <div className="terminal-text">
+            <div className="talent-text">
               <span className="text-green-500">[DIRECTOR]</span> Are you ready to step into the spotlight?
             </div>
-            <div className="terminal-text cursor-blink mt-8">
+            <div className="talent-text cursor-blink mt-8">
               <span className="text-green-500">[TALENT]</span> 
             </div>
           </div>
         </div>
-        {/* ターミナルコマンド */}
+        {/* アクションボタン */)
         <div className="text-center max-w-4xl mx-auto mb-16">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/story-creator">
@@ -52,7 +52,7 @@ STAR_TALENT_AGENCY_v3.0 - [DIRECTOR@STUDIO:~]$
         {/* 芸能事務所システム情報 */}
         <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           <div className="terminal-window">
-            <div className="terminal-header">
+            <div className="talent-header">
               <Camera className="w-4 h-4 inline mr-2" />
               ACTING_COACH.exe
             </div>
@@ -71,7 +71,7 @@ STAR_TALENT_AGENCY_v3.0 - [DIRECTOR@STUDIO:~]$
           </div>
 
           <div className="terminal-window">
-            <div className="terminal-header">
+            <div className="talent-header">
               <Mic className="w-4 h-4 inline mr-2" />
               STUDIO_SETUP.sys
             </div>
@@ -90,7 +90,7 @@ STAR_TALENT_AGENCY_v3.0 - [DIRECTOR@STUDIO:~]$
           </div>
 
           <div className="terminal-window">
-            <div className="terminal-header">
+            <div className="talent-header">
               <Zap className="w-4 h-4 inline mr-2" />
               CONTRACT.blockchain
             </div>
@@ -116,7 +116,7 @@ STAR_TALENT_AGENCY_v3.0 - [DIRECTOR@STUDIO:~]$
 
         {/* 警告メッセージ */}
         <div className="terminal-window max-w-4xl mx-auto mt-8">
-          <div className="terminal-header">
+          <div className="talent-header">
             <span className="glitch-effect" data-text="[AGENCY_NOTICE]">[AGENCY_NOTICE]</span> - TALENT_AGREEMENT
           </div>
           <div className="p-6">
