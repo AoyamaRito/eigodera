@@ -5,7 +5,7 @@ import FakeGodTerminal from '@/components/FakeGodTerminal'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-black matrix-bg">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-16">
         {/* メインビジュアル */}
         <div className="proseka-card max-w-7xl mx-auto mb-16 relative overflow-hidden">

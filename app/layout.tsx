@@ -21,9 +21,8 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${inter.className} antialiased`}>
         <AuthProvider>
-          <MatrixBackground opacity={0.08} speed={80} />
           <Header />
-          <main className="relative min-h-screen bg-black z-10">
+          <main className="relative min-h-screen z-10">
             {children}
           </main>
         </AuthProvider>
