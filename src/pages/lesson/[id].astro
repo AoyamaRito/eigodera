@@ -615,10 +615,9 @@ const userProgress = {
     </div>
   </div>
   
-  <script>
+  <script define:vars={{ totalSections: currentLesson.content.sections.length }}>
     // 進捗バーの更新
     let completedSections = 0;
-    const totalSections = ${currentLesson.content.sections.length};
     
     function updateProgress() {
       const progress = (completedSections / totalSections) * 100;
