@@ -1,0 +1,632 @@
+---
+// AI-First開発原則：完全自己完結型プラットフォームページ
+// 4コーナー理論とモバイルファーストUI
+
+const userData = {
+  name: "学習者",
+  level: "TOEIC 450点",
+  studyDays: 7,
+  nextLesson: "瞬間英作文 - 基礎編"
+};
+
+const lessons = [
+  {
+    id: 1,
+    type: "音読",
+    title: "ビジネス英語の基本フレーズ",
+    duration: "15分",
+    difficulty: "初級",
+    completed: true
+  },
+  {
+    id: 2,
+    type: "瞬間英作文",
+    title: "日常会話でよく使う表現",
+    duration: "20分",
+    difficulty: "初級",
+    completed: false,
+    recommended: true
+  },
+  {
+    id: 3,
+    type: "文法",
+    title: "時制の使い分けマスター",
+    duration: "25分",
+    difficulty: "中級",
+    completed: false
+  },
+  {
+    id: 4,
+    type: "単語",
+    title: "TOEIC頻出単語100",
+    duration: "10分",
+    difficulty: "初級",
+    completed: false
+  }
+];
+
+const chatHistory = [
+  {
+    role: "ai",
+    message: "こんにちは！今日も一緒に英語を学びましょう。どんなことでも質問してくださいね。",
+    time: "14:20"
+  },
+  {
+    role: "user",
+    message: "現在完了形がよくわかりません",
+    time: "14:22"
+  },
+  {
+    role: "ai",
+    message: "現在完了形は「have/has + 過去分詞」の形で、過去から現在までの経験や継続を表現します。例えば「I have lived in Tokyo for 5 years」は「東京に5年間住んでいます」という意味になりますよ。",
+    time: "14:22"
+  }
+];
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英語の駆け込み寺 - 学習プラットフォーム</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --navy: #0F1B3C;
+      --light-navy: #1A2847;
+      --pale-navy: #2C3E5C;
+      --silver: #C0C0C0;
+      --light-silver: #E8E8E8;
+      --copper-light: #FFB380;
+      --copper-dark: #D35400;
+      --white: #FFFFFF;
+      --off-white: #F8F9FA;
+      --text-gray: #6C757D;
+      --success: #27AE60;
+      --error: #C0392B;
+    }
+    
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      background: var(--off-white);
+      color: var(--navy);
+      line-height: 1.6;
+      overflow-x: hidden;
+      padding-bottom: 80px; /* 下部ナビ用 */
+    }
+    
+    .platform-container {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+    
+    /* ヘッダー（上部第1階層） */
+    .platform-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      background: var(--copper-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    
+    .user-details {
+      font-size: 12px;
+    }
+    
+    .user-level {
+      color: var(--copper-light);
+      font-weight: 500;
+    }
+    
+    /* 設定ボタン（右上コーナー） */
+    .corner-top-right {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 101;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .corner-top-right:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* メインコンテンツ */
+    .main-content {
+      padding: 20px;
+    }
+    
+    /* 学習進捗カード */
+    .progress-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(15, 27, 60, 0.08);
+    }
+    
+    .progress-title {
+      font-size: 16px;
+      color: var(--navy);
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    .progress-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 10px;
+      background: var(--off-white);
+      border-radius: 8px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--copper-dark);
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-gray);
+      margin-top: 4px;
+    }
+    
+    /* レッスンリスト */
+    .lessons-section {
+      margin-top: 30px;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      color: var(--navy);
+      font-weight: 600;
+    }
+    
+    .lesson-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 4px rgba(15, 27, 60, 0.06);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .lesson-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(15, 27, 60, 0.12);
+    }
+    
+    .lesson-card.recommended {
+      border-color: var(--copper-light);
+    }
+    
+    .lesson-card.completed {
+      opacity: 0.7;
+    }
+    
+    .lesson-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    
+    .lesson-type {
+      font-size: 12px;
+      color: var(--copper-dark);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .lesson-duration {
+      font-size: 12px;
+      color: var(--text-gray);
+    }
+    
+    .lesson-title {
+      font-size: 16px;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+    
+    .lesson-difficulty {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      background: var(--off-white);
+      color: var(--text-gray);
+      border-radius: 4px;
+    }
+    
+    .recommended-badge {
+      position: absolute;
+      top: -8px;
+      right: 15px;
+      background: var(--copper-light);
+      color: var(--white);
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    
+    /* AIチャット（右下コーナー） */
+    .corner-bottom-right {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      z-index: 100;
+      width: 56px;
+      height: 56px;
+      background: var(--copper-dark);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(213, 84, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .corner-bottom-right:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(213, 84, 0, 0.4);
+    }
+    
+    /* チャットウィンドウ */
+    .chat-window {
+      position: fixed;
+      bottom: 160px;
+      right: 20px;
+      width: 340px;
+      max-width: calc(100vw - 40px);
+      height: 400px;
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(15, 27, 60, 0.15);
+      display: none;
+      flex-direction: column;
+      z-index: 99;
+    }
+    
+    .chat-window.active {
+      display: flex;
+    }
+    
+    .chat-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 15px 20px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .chat-message {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .chat-message.user {
+      flex-direction: row-reverse;
+    }
+    
+    .message-bubble {
+      max-width: 70%;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .chat-message.ai .message-bubble {
+      background: var(--off-white);
+      color: var(--navy);
+    }
+    
+    .chat-message.user .message-bubble {
+      background: var(--copper-light);
+      color: var(--white);
+    }
+    
+    .message-time {
+      font-size: 11px;
+      color: var(--text-gray);
+      margin-top: 4px;
+    }
+    
+    .chat-input {
+      padding: 15px;
+      border-top: 1px solid var(--light-silver);
+      display: flex;
+      gap: 10px;
+    }
+    
+    .chat-input input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid var(--light-silver);
+      border-radius: 20px;
+      font-size: 14px;
+      outline: none;
+    }
+    
+    .chat-input button {
+      background: var(--copper-dark);
+      color: var(--white);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    /* 下部ナビゲーション（下部第1階層） */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-top: 1px solid var(--light-silver);
+      z-index: 100;
+    }
+    
+    .bottom-nav-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      background: var(--off-white);
+    }
+    
+    .nav-item.active {
+      color: var(--copper-dark);
+    }
+    
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .nav-label {
+      font-size: 11px;
+      color: var(--text-gray);
+    }
+    
+    .nav-item.active .nav-label {
+      color: var(--copper-dark);
+    }
+    
+    /* PC用の装飾線 */
+    @media (min-width: 1000px) {
+      body::before,
+      body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: transparent;
+        border-left: 6px dashed var(--navy);
+        opacity: 0.3;
+        z-index: 10;
+      }
+      
+      body::before {
+        left: calc(50% - 500px);
+      }
+      
+      body::after {
+        right: calc(50% - 500px);
+      }
+      
+      .chat-window {
+        right: calc(50% - 460px);
+      }
+      
+      .corner-bottom-right {
+        right: calc(50% - 460px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="platform-container">
+    <!-- ヘッダー -->
+    <header class="platform-header">
+      <div class="user-info">
+        <div class="user-avatar">学</div>
+        <div class="user-details">
+          <div>{userData.name}さん</div>
+          <div class="user-level">{userData.level}</div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- 設定ボタン（右上） -->
+    <div class="corner-top-right">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+      </svg>
+    </div>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+      <!-- 学習進捗 -->
+      <div class="progress-card">
+        <h2 class="progress-title">今週の学習状況</h2>
+        <div class="progress-stats">
+          <div class="stat-item">
+            <div class="stat-value">{userData.studyDays}</div>
+            <div class="stat-label">連続学習日数</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">85</div>
+            <div class="stat-label">今週の学習分数</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- レッスンリスト -->
+      <section class="lessons-section">
+        <div class="section-header">
+          <h2 class="section-title">今日のレッスン</h2>
+        </div>
+        
+        {lessons.map((lesson) => (
+          <div class={`lesson-card ${lesson.completed ? 'completed' : ''} ${lesson.recommended ? 'recommended' : ''}`}>
+            {lesson.recommended && <div class="recommended-badge">おすすめ</div>}
+            <div class="lesson-header">
+              <span class="lesson-type">{lesson.type}</span>
+              <span class="lesson-duration">{lesson.duration}</span>
+            </div>
+            <h3 class="lesson-title">{lesson.title}</h3>
+            <span class="lesson-difficulty">{lesson.difficulty}</span>
+          </div>
+        ))}
+      </section>
+    </main>
+    
+    <!-- AIチャットボタン（右下） -->
+    <div class="corner-bottom-right" onclick="toggleChat()">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </div>
+    
+    <!-- チャットウィンドウ -->
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <span>AI英語コーチ</span>
+        <span style="cursor: pointer;" onclick="toggleChat()">×</span>
+      </div>
+      <div class="chat-messages">
+        {chatHistory.map((msg) => (
+          <div class={`chat-message ${msg.role}`}>
+            <div class="message-content">
+              <div class="message-bubble">{msg.message}</div>
+              <div class="message-time">{msg.time}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="chat-input">
+        <input type="text" placeholder="質問を入力..." />
+        <button>送信</button>
+      </div>
+    </div>
+    
+    <!-- 下部ナビゲーション -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav-inner">
+        <div class="nav-item active">
+          <div class="nav-icon">🏠</div>
+          <span class="nav-label">ホーム</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">📚</div>
+          <span class="nav-label">レッスン</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">📊</div>
+          <span class="nav-label">進捗</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">👤</div>
+          <span class="nav-label">マイページ</span>
+        </div>
+      </div>
+    </nav>
+  </div>
+  
+  <script>
+    function toggleChat() {
+      const chatWindow = document.getElementById('chatWindow');
+      chatWindow.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>
