@@ -1,0 +1,682 @@
+---
+// AI-First開発原則：個別レッスンページ（動的ルーティング）
+// シーケンシャル学習システムの実装
+
+export async function getStaticPaths() {
+  // レッスンIDのリストを生成
+  const lessons = Array.from({ length: 20 }, (_, i) => ({ id: i + 1 }));
+  
+  return lessons.map(lesson => ({
+    params: { id: lesson.id.toString() },
+  }));
+}
+
+const { id } = Astro.params;
+const lessonId = parseInt(id);
+
+// レッスンデータ（実際の運用ではデータベースから取得）
+const lessonData = {
+  1: {
+    title: "英語学習の基本マインドセット",
+    type: "講義",
+    duration: "10分",
+    points: 50,
+    content: {
+      introduction: "英語学習で最も重要なのは、正しいマインドセットを持つことです。このレッスンでは、効果的な英語学習のための心構えを学びます。",
+      sections: [
+        {
+          title: "1. 完璧主義を捨てる",
+          content: "多くの日本人学習者が陥る「完璧でなければ話してはいけない」という思い込みを捨てましょう。",
+          practice: "今日から「I think...」「Maybe...」を使って、自信がなくても話す練習をしましょう。"
+        },
+        {
+          title: "2. 毎日少しずつ",
+          content: "1日5分でも構いません。継続が最も重要です。",
+          practice: "スマートフォンのアラームを設定し、毎日同じ時間に5分だけ英語に触れる習慣を作りましょう。"
+        },
+        {
+          title: "3. 間違いは成長のチャンス",
+          content: "間違えることを恐れず、むしろ積極的に間違えましょう。",
+          practice: "今日、わざと3つ英語で間違えてみましょう。そして、正しい表現を調べて記録します。"
+        }
+      ],
+      quiz: [
+        {
+          question: "英語学習で最も重要なことは何ですか？",
+          options: ["完璧な文法", "毎日の継続", "ネイティブのような発音", "高価な教材"],
+          correct: 1
+        }
+      ]
+    }
+  },
+  2: {
+    title: "発音の基礎 - 母音と子音",
+    type: "発音練習",
+    duration: "15分",
+    points: 75,
+    content: {
+      introduction: "日本人が苦手とする英語の音を克服しましょう。まずは基本的な母音と子音から始めます。",
+      sections: [
+        {
+          title: "1. RとLの違い",
+          content: "日本語の「ら行」とは全く異なる音です。舌の位置に注目しましょう。",
+          practice: "Right/Light, Read/Lead, Rice/Liceを10回ずつ練習します。"
+        },
+        {
+          title: "2. THの音",
+          content: "舌を軽く噛んで息を出す音です。日本語にはない音ですが、練習すれば必ずできます。",
+          practice: "Think, Thank, Three, Thisを鏡を見ながら練習しましょう。"
+        },
+        {
+          title: "3. 母音の区別",
+          content: "英語には日本語より多くの母音があります。特に「ア」の音に注意。",
+          practice: "Cat/Cut, Hat/Hut, Bad/Budの違いを意識して発音します。"
+        }
+      ],
+      quiz: [
+        {
+          question: "Rの音を出すとき、舌はどこにありますか？",
+          options: ["上の歯茎に触れる", "どこにも触れない", "下の歯茎に触れる", "歯の間に挟む"],
+          correct: 1
+        }
+      ]
+    }
+  },
+  3: {
+    title: "基本動詞50 - haveの使い方",
+    type: "文法・語彙",
+    duration: "20分",
+    points: 100,
+    content: {
+      introduction: "英語で最も重要な動詞の一つ「have」。所有だけでなく、経験、食事、病気など様々な場面で使われます。",
+      sections: [
+        {
+          title: "1. 基本的な所有の表現",
+          content: "I have a pen. のような基本的な使い方から始めましょう。",
+          practice: "自分の持ち物を5つ、I have...で表現してみましょう。"
+        },
+        {
+          title: "2. 経験を表すhave",
+          content: "have + 過去分詞で「〜したことがある」を表現します。",
+          practice: "I have been to..., I have eaten..., I have seen...を使って3つの経験を話しましょう。"
+        },
+        {
+          title: "3. 日常生活のhave",
+          content: "have breakfast, have a meeting, have funなど、日常的な表現を覚えましょう。",
+          practice: "今日の予定をhaveを使って5つ表現してみましょう。"
+        }
+      ],
+      quiz: [
+        {
+          question: "「朝食を食べる」を英語で言うと？",
+          options: ["eat breakfast", "have breakfast", "take breakfast", "do breakfast"],
+          correct: 1
+        }
+      ]
+    }
+  }
+};
+
+// 現在のレッスンデータを取得（デフォルトはレッスン1）
+const currentLesson = lessonData[lessonId] || lessonData[1];
+
+// ユーザーの進捗状況（実際の運用ではユーザーごとに管理）
+const userProgress = {
+  completedSections: [],
+  quizScore: 0,
+  currentSection: 0
+};
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{currentLesson.title} - 英語の駆け込み寺</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --navy: #0F1B3C;
+      --light-navy: #1A2847;
+      --pale-navy: #2C3E5C;
+      --silver: #C0C0C0;
+      --light-silver: #E8E8E8;
+      --copper-light: #FFB380;
+      --copper-dark: #D35400;
+      --white: #FFFFFF;
+      --off-white: #F8F9FA;
+      --text-gray: #6C757D;
+      --success: #27AE60;
+      --error: #E74C3C;
+      --warning: #F39C12;
+    }
+    
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      background: var(--off-white);
+      color: var(--navy);
+      line-height: 1.7;
+    }
+    
+    .lesson-container {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--white);
+    }
+    
+    /* レッスンヘッダー */
+    .lesson-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .back-button {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .lesson-info {
+      flex: 1;
+      margin: 0 15px;
+    }
+    
+    .lesson-type {
+      font-size: 12px;
+      color: var(--copper-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .lesson-title {
+      font-size: 18px;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    
+    .points-badge {
+      background: var(--copper-light);
+      color: var(--navy);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    /* 進捗バー */
+    .progress-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--copper-light);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    
+    /* レッスンコンテンツ */
+    .lesson-content {
+      padding: 20px;
+    }
+    
+    .introduction {
+      background: var(--off-white);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      border-left: 4px solid var(--copper-light);
+    }
+    
+    .introduction h2 {
+      font-size: 16px;
+      color: var(--navy);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .introduction p {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+    
+    /* セクション */
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: var(--white);
+      border: 1px solid var(--light-silver);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .section.completed {
+      border-color: var(--success);
+      background: rgba(39, 174, 96, 0.05);
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      color: var(--navy);
+      font-weight: 600;
+    }
+    
+    .section-status {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--light-silver);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .section.completed .section-status {
+      background: var(--success);
+      border-color: var(--success);
+    }
+    
+    .section-content {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-bottom: 15px;
+      line-height: 1.7;
+    }
+    
+    /* 練習セクション */
+    .practice-box {
+      background: var(--off-white);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border-left: 3px solid var(--copper-dark);
+    }
+    
+    .practice-label {
+      font-size: 12px;
+      color: var(--copper-dark);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    .practice-content {
+      font-size: 14px;
+      color: var(--navy);
+    }
+    
+    /* クイズセクション */
+    .quiz-section {
+      background: var(--pale-navy);
+      color: var(--white);
+      padding: 30px 20px;
+      margin: 30px -20px;
+    }
+    
+    .quiz-title {
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .quiz-question {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .question-text {
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .quiz-option {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid transparent;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+    
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: var(--copper-light);
+    }
+    
+    .quiz-option.selected {
+      background: var(--copper-light);
+      color: var(--navy);
+      border-color: var(--copper-light);
+    }
+    
+    .quiz-option.correct {
+      background: var(--success);
+      color: var(--white);
+      border-color: var(--success);
+    }
+    
+    .quiz-option.incorrect {
+      background: var(--error);
+      color: var(--white);
+      border-color: var(--error);
+    }
+    
+    /* アクションボタン */
+    .action-buttons {
+      padding: 20px;
+      display: flex;
+      gap: 15px;
+      position: sticky;
+      bottom: 0;
+      background: var(--white);
+      border-top: 1px solid var(--light-silver);
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: var(--copper-dark);
+      color: var(--white);
+    }
+    
+    .btn-primary:hover {
+      background: var(--copper-light);
+    }
+    
+    .btn-secondary {
+      background: var(--light-silver);
+      color: var(--navy);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--silver);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* 完了画面 */
+    .completion-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 27, 60, 0.95);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .completion-screen.active {
+      display: flex;
+    }
+    
+    .completion-card {
+      background: var(--white);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 400px;
+      margin: 20px;
+    }
+    
+    .completion-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 20px;
+    }
+    
+    .completion-title {
+      font-size: 24px;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    
+    .completion-points {
+      font-size: 18px;
+      color: var(--copper-dark);
+      margin-bottom: 30px;
+    }
+    
+    /* PC用の装飾線 */
+    @media (min-width: 1000px) {
+      body::before,
+      body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: transparent;
+        border-left: 6px dashed var(--navy);
+        opacity: 0.3;
+        z-index: 10;
+      }
+      
+      body::before {
+        left: calc(50% - 500px);
+      }
+      
+      body::after {
+        right: calc(50% - 500px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="lesson-container">
+    <!-- レッスンヘッダー -->
+    <header class="lesson-header">
+      <div class="header-top">
+        <div class="back-button" onclick="window.location.href='/lessons'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </div>
+        <div class="lesson-info">
+          <div class="lesson-type">{currentLesson.type}</div>
+          <h1 class="lesson-title">{currentLesson.title}</h1>
+        </div>
+        <div class="points-badge">+{currentLesson.points}pt</div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+    </header>
+    
+    <!-- レッスンコンテンツ -->
+    <main class="lesson-content">
+      <!-- イントロダクション -->
+      <div class="introduction">
+        <h2>レッスンの概要</h2>
+        <p>{currentLesson.content.introduction}</p>
+      </div>
+      
+      <!-- セクション -->
+      {currentLesson.content.sections.map((section, index) => (
+        <div class="section" id={`section-${index}`}>
+          <div class="section-header">
+            <h3 class="section-title">{section.title}</h3>
+            <div class="section-status">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <path d="M20 6L9 17l-5-5" style="display: none;"></path>
+              </svg>
+            </div>
+          </div>
+          <p class="section-content">{section.content}</p>
+          <div class="practice-box">
+            <div class="practice-label">練習</div>
+            <div class="practice-content">{section.practice}</div>
+          </div>
+        </div>
+      ))}
+      
+      <!-- クイズ -->
+      <div class="quiz-section">
+        <h3 class="quiz-title">理解度チェック</h3>
+        {currentLesson.content.quiz.map((quiz, index) => (
+          <div class="quiz-question">
+            <p class="question-text">{quiz.question}</p>
+            <div class="quiz-options">
+              {quiz.options.map((option, optionIndex) => (
+                <div class="quiz-option" data-correct={optionIndex === quiz.correct} onclick="selectQuizOption(this)">
+                  {option}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
+    
+    <!-- アクションボタン -->
+    <div class="action-buttons">
+      <button class="btn btn-secondary" onclick="saveProgress()">進捗を保存</button>
+      <button class="btn btn-primary" onclick="completeLesson()">レッスン完了</button>
+    </div>
+    
+    <!-- 完了画面 -->
+    <div class="completion-screen" id="completionScreen">
+      <div class="completion-card">
+        <div class="completion-icon">✓</div>
+        <h2 class="completion-title">レッスン完了！</h2>
+        <p class="completion-points">{currentLesson.points}ポイント獲得</p>
+        <button class="btn btn-primary" onclick="window.location.href='/lessons'">レッスン一覧へ戻る</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 進捗バーの更新
+    let completedSections = 0;
+    const totalSections = {currentLesson.content.sections.length};
+    
+    function updateProgress() {
+      const progress = (completedSections / totalSections) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+    
+    // セクションの完了マーク
+    document.querySelectorAll('.section').forEach((section, index) => {
+      section.addEventListener('click', function() {
+        if (!this.classList.contains('completed')) {
+          this.classList.add('completed');
+          this.querySelector('.section-status svg path').style.display = 'block';
+          completedSections++;
+          updateProgress();
+        }
+      });
+    });
+    
+    // クイズの選択
+    function selectQuizOption(element) {
+      // 既に選択されている場合は何もしない
+      if (element.classList.contains('selected') || 
+          element.classList.contains('correct') || 
+          element.classList.contains('incorrect')) {
+        return;
+      }
+      
+      // 同じ質問内の他のオプションをリセット
+      element.parentElement.querySelectorAll('.quiz-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      // 選択状態にする
+      element.classList.add('selected');
+      
+      // 正誤判定
+      setTimeout(() => {
+        const isCorrect = element.dataset.correct === 'true';
+        element.classList.remove('selected');
+        element.classList.add(isCorrect ? 'correct' : 'incorrect');
+      }, 500);
+    }
+    
+    // 進捗の保存
+    function saveProgress() {
+      // 実際の実装では、サーバーに進捗を保存
+      alert('進捗を保存しました');
+    }
+    
+    // レッスン完了
+    function completeLesson() {
+      if (completedSections < totalSections) {
+        alert('すべてのセクションを完了してください');
+        return;
+      }
+      
+      document.getElementById('completionScreen').classList.add('active');
+    }
+  </script>
+</body>
+</html>

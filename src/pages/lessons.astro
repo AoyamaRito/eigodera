@@ -1,0 +1,575 @@
+---
+// AI-First開発原則：シーケンシャルレッスンシステム
+// Lesson 1から順番に進める学習システム
+
+const userProgress = {
+  currentLesson: 3,
+  completedLessons: [1, 2],
+  totalLessons: 20,
+  points: 250
+};
+
+const lessons = [
+  {
+    id: 1,
+    title: "英語学習の基本マインドセット",
+    description: "英語を身につけるための心構えと学習法",
+    duration: "10分",
+    points: 50,
+    status: "completed"
+  },
+  {
+    id: 2,
+    title: "発音の基礎 - 母音と子音",
+    description: "日本人が苦手な発音を克服する",
+    duration: "15分",
+    points: 75,
+    status: "completed"
+  },
+  {
+    id: 3,
+    title: "基本動詞50 - haveの使い方",
+    description: "最重要動詞haveを完全マスター",
+    duration: "20分",
+    points: 100,
+    status: "current"
+  },
+  {
+    id: 4,
+    title: "基本動詞50 - getの使い方",
+    description: "万能動詞getを使いこなす",
+    duration: "20分",
+    points: 100,
+    status: "locked"
+  },
+  {
+    id: 5,
+    title: "時制の基本 - 現在形",
+    description: "英語の時間感覚を身につける",
+    duration: "25分",
+    points: 125,
+    status: "locked"
+  },
+  {
+    id: 6,
+    title: "時制の基本 - 過去形",
+    description: "過去の出来事を正確に表現する",
+    duration: "25分",
+    points: 125,
+    status: "locked"
+  },
+  {
+    id: 7,
+    title: "日常会話フレーズ100 - 挨拶編",
+    description: "自然な挨拶で会話を始める",
+    duration: "15分",
+    points: 75,
+    status: "locked"
+  },
+  {
+    id: 8,
+    title: "リスニング強化 - 音のつながり",
+    description: "ネイティブの速い英語を聞き取る",
+    duration: "30分",
+    points: 150,
+    status: "locked"
+  }
+];
+
+// 進捗率を計算
+const progressPercentage = Math.round((userProgress.completedLessons.length / userProgress.totalLessons) * 100);
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>レッスン一覧 - 英語の駆け込み寺</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --navy: #0F1B3C;
+      --light-navy: #1A2847;
+      --pale-navy: #2C3E5C;
+      --silver: #C0C0C0;
+      --light-silver: #E8E8E8;
+      --copper-light: #FFB380;
+      --copper-dark: #D35400;
+      --white: #FFFFFF;
+      --off-white: #F8F9FA;
+      --text-gray: #6C757D;
+      --success: #27AE60;
+      --locked: #BDC3C7;
+    }
+    
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      background: var(--off-white);
+      color: var(--navy);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+    
+    .lessons-container {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+    
+    /* ヘッダー */
+    .lessons-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .back-button {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+    
+    .points-badge {
+      background: var(--copper-light);
+      color: var(--navy);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    /* 進捗バー */
+    .progress-section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+    }
+    
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--copper-light);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    
+    /* レッスンリスト */
+    .lessons-list {
+      padding: 20px;
+    }
+    
+    .lesson-item {
+      background: var(--white);
+      border-radius: 12px;
+      margin-bottom: 15px;
+      padding: 20px;
+      position: relative;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    
+    /* レッスン接続線 */
+    .lesson-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 40px;
+      width: 2px;
+      height: 15px;
+      background: var(--light-silver);
+    }
+    
+    .lesson-item.completed::after {
+      background: var(--success);
+    }
+    
+    .lesson-item.current::after {
+      background: var(--copper-light);
+      background: linear-gradient(to bottom, var(--copper-light), var(--light-silver));
+    }
+    
+    /* レッスン番号 */
+    .lesson-number {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .lesson-item.completed .lesson-number {
+      background: var(--success);
+      color: var(--white);
+    }
+    
+    .lesson-item.current .lesson-number {
+      background: var(--copper-light);
+      color: var(--white);
+      animation: pulse 2s infinite;
+    }
+    
+    .lesson-item.locked .lesson-number {
+      background: var(--locked);
+      color: var(--white);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: translateY(-50%) scale(1); }
+      50% { transform: translateY(-50%) scale(1.1); }
+    }
+    
+    /* レッスン内容 */
+    .lesson-content {
+      margin-left: 60px;
+    }
+    
+    .lesson-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+    
+    .lesson-item.locked .lesson-title {
+      color: var(--text-gray);
+    }
+    
+    .lesson-description {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-bottom: 10px;
+    }
+    
+    .lesson-meta {
+      display: flex;
+      gap: 20px;
+      font-size: 12px;
+      color: var(--text-gray);
+    }
+    
+    .lesson-duration,
+    .lesson-points {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    /* 状態別スタイル */
+    .lesson-item.completed {
+      opacity: 0.8;
+    }
+    
+    .lesson-item.current {
+      border-color: var(--copper-light);
+      box-shadow: 0 4px 12px rgba(255, 163, 102, 0.2);
+    }
+    
+    .lesson-item.current:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 163, 102, 0.3);
+    }
+    
+    .lesson-item.locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .lesson-item.locked:hover {
+      transform: none;
+    }
+    
+    /* ロック表示 */
+    .lock-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      opacity: 0.5;
+    }
+    
+    /* 完了チェック */
+    .check-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      color: var(--success);
+    }
+    
+    /* 現在のレッスン強調 */
+    .current-badge {
+      position: absolute;
+      top: -8px;
+      right: 20px;
+      background: var(--copper-light);
+      color: var(--white);
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    
+    /* フローティングアクションボタン */
+    .continue-button {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      background: var(--copper-dark);
+      color: var(--white);
+      padding: 16px 32px;
+      border-radius: 30px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(213, 84, 0, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 90;
+    }
+    
+    .continue-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(213, 84, 0, 0.4);
+    }
+    
+    /* 下部ナビゲーション */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-top: 1px solid var(--light-silver);
+      z-index: 100;
+    }
+    
+    .bottom-nav-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      background: var(--off-white);
+    }
+    
+    .nav-item.active {
+      color: var(--copper-dark);
+    }
+    
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .nav-label {
+      font-size: 11px;
+      color: var(--text-gray);
+    }
+    
+    .nav-item.active .nav-label {
+      color: var(--copper-dark);
+    }
+    
+    /* PC用の装飾線 */
+    @media (min-width: 1000px) {
+      body::before,
+      body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: transparent;
+        border-left: 6px dashed var(--navy);
+        opacity: 0.3;
+        z-index: 10;
+      }
+      
+      body::before {
+        left: calc(50% - 500px);
+      }
+      
+      body::after {
+        right: calc(50% - 500px);
+      }
+      
+      .continue-button {
+        right: calc(50% - 460px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="lessons-container">
+    <!-- ヘッダー -->
+    <header class="lessons-header">
+      <div class="header-top">
+        <div class="back-button" onclick="window.location.href='/platform'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </div>
+        <h1 class="header-title">レッスン一覧</h1>
+        <div class="points-badge">{userProgress.points} pt</div>
+      </div>
+      
+      <div class="progress-section">
+        <div class="progress-info">
+          <span>進捗: {userProgress.completedLessons.length}/{userProgress.totalLessons}</span>
+          <span>{progressPercentage}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style={`width: ${progressPercentage}%`}></div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- レッスンリスト -->
+    <main class="lessons-list">
+      {lessons.map((lesson) => (
+        <div class={`lesson-item ${lesson.status}`} onclick={lesson.status !== 'locked' ? `window.location.href='/lesson/${lesson.id}'` : ''}>
+          {lesson.status === 'current' && <div class="current-badge">現在のレッスン</div>}
+          
+          <div class="lesson-number">{lesson.id}</div>
+          
+          <div class="lesson-content">
+            <h3 class="lesson-title">{lesson.title}</h3>
+            <p class="lesson-description">{lesson.description}</p>
+            <div class="lesson-meta">
+              <div class="lesson-duration">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 6v6l4 2"></path>
+                </svg>
+                {lesson.duration}
+              </div>
+              <div class="lesson-points">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                {lesson.points}pt
+              </div>
+            </div>
+          </div>
+          
+          {lesson.status === 'completed' && (
+            <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+          )}
+          
+          {lesson.status === 'locked' && (
+            <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="5" y="11" width="14" height="10" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0110 0v4"></path>
+            </svg>
+          )}
+        </div>
+      ))}
+    </main>
+    
+    <!-- 続けるボタン -->
+    <button class="continue-button" onclick="window.location.href='/lesson/3'">
+      Lesson 3を続ける
+    </button>
+    
+    <!-- 下部ナビゲーション -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav-inner">
+        <div class="nav-item" onclick="window.location.href='/platform'">
+          <div class="nav-icon">🏠</div>
+          <span class="nav-label">ホーム</span>
+        </div>
+        <div class="nav-item active">
+          <div class="nav-icon">📚</div>
+          <span class="nav-label">レッスン</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">📊</div>
+          <span class="nav-label">進捗</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">👤</div>
+          <span class="nav-label">マイページ</span>
+        </div>
+      </div>
+    </nav>
+  </div>
+</body>
+</html>
