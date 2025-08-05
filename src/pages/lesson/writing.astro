@@ -624,7 +624,7 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
           
           <!-- ヒント -->
           <div class="hints-section">
-            <button class="hints-toggle" onclick={`toggleHints(${task.id})`}>
+            <button class="hints-toggle" onclick={`window.toggleHints(${task.id})`}>
               <span>💡</span>
               <span>ヒントを見る</span>
             </button>
@@ -642,17 +642,17 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
               class="writing-input" 
               id={`input-${task.id}`}
               placeholder="英文を入力してください..."
-              oninput={`updateCharCount(${task.id})`}
+              oninput={`window.updateCharCount(${task.id})`}
             ></textarea>
             <div class="char-count" id={`count-${task.id}`}>0文字</div>
           </div>
           
           <!-- アクションボタン -->
           <div class="action-buttons">
-            <button class="btn btn-skip" onclick={`skipTask(${task.id})`}>
+            <button class="btn btn-skip" onclick={`window.skipTask(${task.id})`}>
               スキップ
             </button>
-            <button class="btn btn-evaluate" id={`evaluate-${task.id}`} onclick={`evaluateWriting(${task.id}, '${task.japanese}')`}>
+            <button class="btn btn-evaluate" id={`evaluate-${task.id}`} onclick={`window.evaluateWriting(${task.id}, '${task.japanese}')`}>
               <span>添削する</span>
               <span class="loading-spinner" style="display: none;"></span>
             </button>
@@ -678,20 +678,20 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
     let totalPoints = 0;
     
     // ヒントの表示/非表示
-    function toggleHints(taskId) {
+    window.toggleHints = function(taskId) {
       const hintsEl = document.getElementById(`hints-${taskId}`);
       hintsEl.classList.toggle('show');
     }
     
     // 文字数カウント
-    function updateCharCount(taskId) {
+    window.updateCharCount = function(taskId) {
       const input = document.getElementById(`input-${taskId}`);
       const count = document.getElementById(`count-${taskId}`);
       count.textContent = `${input.value.length}文字`;
     }
     
     // 英作文の評価
-    async function evaluateWriting(taskId, japaneseText) {
+    window.evaluateWriting = async function(taskId, japaneseText) {
       const input = document.getElementById(`input-${taskId}`);
       const userAnswer = input.value.trim();
       
@@ -831,7 +831,7 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
     }
     
     // タスクをスキップ
-    function skipTask(taskId) {
+    window.skipTask = function(taskId) {
       const taskCard = document.getElementById(`task-${taskId}`);
       taskCard.classList.remove('active');
       
