@@ -1,0 +1,803 @@
+---
+// AI-First開発原則：英作文練習ページ
+// 日本語から英語への翻訳練習とAI添削
+
+const lessonId = Astro.url.searchParams.get('lesson') || '1';
+
+// 英作文課題データ
+const writingTasks = {
+  1: [
+    {
+      id: 1,
+      japanese: "自転車は環境に優しい。",
+      hints: ["bicycle", "environmentally friendly", "eco-friendly"],
+      level: "初級",
+      points: 10
+    },
+    {
+      id: 2,
+      japanese: "毎朝6時に起きています。",
+      hints: ["every morning", "get up", "wake up"],
+      level: "初級",
+      points: 10
+    },
+    {
+      id: 3,
+      japanese: "この本はとても面白かったです。",
+      hints: ["This book", "very interesting", "was"],
+      level: "初級",
+      points: 15
+    }
+  ],
+  2: [
+    {
+      id: 1,
+      japanese: "昨日、友達と映画を見に行きました。",
+      hints: ["yesterday", "went to", "watch a movie", "with my friend"],
+      level: "初級",
+      points: 15
+    },
+    {
+      id: 2,
+      japanese: "英語を話せるようになりたいです。",
+      hints: ["want to", "be able to", "speak English"],
+      level: "初級",
+      points: 15
+    }
+  ],
+  3: [
+    {
+      id: 1,
+      japanese: "私は5年間東京に住んでいます。",
+      hints: ["I have", "lived in", "for 5 years"],
+      level: "中級",
+      points: 20
+    },
+    {
+      id: 2,
+      japanese: "もし時間があれば、あなたを手伝います。",
+      hints: ["If I have time", "I will help you"],
+      level: "中級",
+      points: 20
+    }
+  ]
+};
+
+const currentTasks = writingTasks[lessonId] || writingTasks[1];
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英作文練習 - Lesson {lessonId} | 英語の駆け込み寺</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --navy: #0F1B3C;
+      --light-navy: #1A2847;
+      --pale-navy: #2C3E5C;
+      --silver: #C0C0C0;
+      --light-silver: #E8E8E8;
+      --copper-light: #FFB380;
+      --copper-dark: #D35400;
+      --white: #FFFFFF;
+      --off-white: #F8F9FA;
+      --text-gray: #6C757D;
+      --success: #27AE60;
+      --error: #E74C3C;
+      --warning: #F39C12;
+      --info: #3498DB;
+    }
+    
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      background: var(--off-white);
+      color: var(--navy);
+      line-height: 1.7;
+    }
+    
+    .writing-container {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--white);
+    }
+    
+    /* ヘッダー */
+    .writing-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .back-button {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .header-title {
+      font-size: 18px;
+      font-weight: 400;
+      flex: 1;
+      text-align: center;
+    }
+    
+    .total-points {
+      background: var(--copper-light);
+      color: var(--navy);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    /* 進捗表示 */
+    .progress-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+    }
+    
+    /* メインコンテンツ */
+    .writing-content {
+      padding: 20px;
+    }
+    
+    /* 課題カード */
+    .task-card {
+      background: var(--white);
+      border: 2px solid var(--light-silver);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .task-card.active {
+      border-color: var(--copper-light);
+      box-shadow: 0 4px 12px rgba(255, 179, 128, 0.2);
+    }
+    
+    .task-card.completed {
+      background: rgba(39, 174, 96, 0.05);
+      border-color: var(--success);
+    }
+    
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .task-number {
+      background: var(--navy);
+      color: var(--white);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .task-card.completed .task-number {
+      background: var(--success);
+    }
+    
+    .task-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .task-level {
+      font-size: 12px;
+      padding: 4px 10px;
+      background: var(--off-white);
+      color: var(--text-gray);
+      border-radius: 12px;
+    }
+    
+    .task-points {
+      font-size: 12px;
+      color: var(--copper-dark);
+      font-weight: 600;
+    }
+    
+    /* 日本語文 */
+    .japanese-text {
+      font-size: 20px;
+      color: var(--navy);
+      margin-bottom: 20px;
+      padding: 20px;
+      background: var(--off-white);
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    
+    /* ヒント */
+    .hints-section {
+      margin-bottom: 20px;
+    }
+    
+    .hints-toggle {
+      background: none;
+      border: 1px solid var(--copper-light);
+      color: var(--copper-dark);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0 auto;
+    }
+    
+    .hints-toggle:hover {
+      background: var(--copper-light);
+      color: var(--white);
+    }
+    
+    .hints-list {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      background: rgba(255, 179, 128, 0.1);
+      border-radius: 8px;
+    }
+    
+    .hints-list.show {
+      display: block;
+    }
+    
+    .hint-item {
+      display: inline-block;
+      background: var(--white);
+      padding: 6px 12px;
+      margin: 4px;
+      border-radius: 16px;
+      font-size: 14px;
+      color: var(--text-gray);
+      border: 1px solid var(--light-silver);
+    }
+    
+    /* 英作文入力エリア */
+    .writing-area {
+      margin-bottom: 20px;
+    }
+    
+    .writing-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 10px;
+      display: block;
+    }
+    
+    .writing-input {
+      width: 100%;
+      min-height: 100px;
+      padding: 15px;
+      border: 2px solid var(--light-silver);
+      border-radius: 12px;
+      font-size: 16px;
+      line-height: 1.6;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+    
+    .writing-input:focus {
+      outline: none;
+      border-color: var(--copper-light);
+      box-shadow: 0 0 0 3px rgba(255, 179, 128, 0.1);
+    }
+    
+    .char-count {
+      text-align: right;
+      font-size: 12px;
+      color: var(--text-gray);
+      margin-top: 5px;
+    }
+    
+    /* アクションボタン */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-evaluate {
+      background: var(--copper-dark);
+      color: var(--white);
+    }
+    
+    .btn-evaluate:hover {
+      background: var(--copper-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(213, 84, 0, 0.3);
+    }
+    
+    .btn-skip {
+      background: var(--light-silver);
+      color: var(--text-gray);
+    }
+    
+    .btn-skip:hover {
+      background: var(--silver);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    /* 評価結果表示 */
+    .evaluation-result {
+      display: none;
+      background: var(--off-white);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      border: 2px solid var(--copper-light);
+    }
+    
+    .evaluation-result.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .score-badge {
+      font-size: 24px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 30px;
+      color: var(--white);
+    }
+    
+    .score-excellent { background: var(--success); }
+    .score-good { background: var(--copper-light); }
+    .score-fair { background: var(--warning); }
+    .score-poor { background: var(--error); }
+    
+    /* フィードバックセクション */
+    .feedback-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--light-silver);
+    }
+    
+    .feedback-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .feedback-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .feedback-text {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+    
+    /* 修正例 */
+    .corrected-answer {
+      background: var(--pale-navy);
+      color: var(--white);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    
+    .corrected-label {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+    
+    .corrected-text {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    /* ローディング */
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--white);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* 完了メッセージ */
+    .completion-message {
+      background: var(--success);
+      color: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .completion-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .completion-text {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    /* PC用の装飾線 */
+    @media (min-width: 1000px) {
+      body::before,
+      body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: transparent;
+        border-left: 6px dashed var(--navy);
+        opacity: 0.3;
+        z-index: 10;
+      }
+      
+      body::before {
+        left: calc(50% - 500px);
+      }
+      
+      body::after {
+        right: calc(50% - 500px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="writing-container">
+    <!-- ヘッダー -->
+    <header class="writing-header">
+      <div class="header-content">
+        <div class="back-button" onclick="window.location.href=`/lesson/${lessonId}`">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </div>
+        <h1 class="header-title">英作文練習 - Lesson {lessonId}</h1>
+        <div class="total-points" id="totalPoints">0 pt</div>
+      </div>
+      <div class="progress-info">
+        <span id="progressText">0/{currentTasks.length}問完了</span>
+      </div>
+    </header>
+    
+    <!-- メインコンテンツ -->
+    <main class="writing-content">
+      {currentTasks.map((task, index) => (
+        <div class={`task-card ${index === 0 ? 'active' : ''}`} id={`task-${task.id}`} data-task-id={task.id}>
+          <div class="task-header">
+            <div class="task-number">{task.id}</div>
+            <div class="task-meta">
+              <span class="task-level">{task.level}</span>
+              <span class="task-points">{task.points}pt</span>
+            </div>
+          </div>
+          
+          <!-- 日本語文 -->
+          <div class="japanese-text">
+            {task.japanese}
+          </div>
+          
+          <!-- ヒント -->
+          <div class="hints-section">
+            <button class="hints-toggle" onclick={`toggleHints(${task.id})`}>
+              <span>💡</span>
+              <span>ヒントを見る</span>
+            </button>
+            <div class="hints-list" id={`hints-${task.id}`}>
+              {task.hints.map(hint => (
+                <span class="hint-item">{hint}</span>
+              ))}
+            </div>
+          </div>
+          
+          <!-- 英作文入力 -->
+          <div class="writing-area">
+            <label class="writing-label">あなたの英文</label>
+            <textarea 
+              class="writing-input" 
+              id={`input-${task.id}`}
+              placeholder="英文を入力してください..."
+              oninput={`updateCharCount(${task.id})`}
+            ></textarea>
+            <div class="char-count" id={`count-${task.id}`}>0文字</div>
+          </div>
+          
+          <!-- アクションボタン -->
+          <div class="action-buttons">
+            <button class="btn btn-skip" onclick={`skipTask(${task.id})`}>
+              スキップ
+            </button>
+            <button class="btn btn-evaluate" id={`evaluate-${task.id}`} onclick={`evaluateWriting(${task.id}, '${task.japanese}')`}>
+              <span>添削する</span>
+              <span class="loading-spinner" style="display: none;"></span>
+            </button>
+          </div>
+          
+          <!-- 評価結果 -->
+          <div class="evaluation-result" id={`result-${task.id}`}></div>
+        </div>
+      ))}
+      
+      <!-- 全問完了メッセージ -->
+      <div class="completion-message" id="completionMessage" style="display: none;">
+        <h2 class="completion-title">🎉 全問完了！</h2>
+        <p class="completion-text">
+          素晴らしい！Lesson {lessonId}の英作文練習を完了しました。
+        </p>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    let completedTasks = 0;
+    let totalPoints = 0;
+    const taskData = ${JSON.stringify(currentTasks)};
+    
+    // ヒントの表示/非表示
+    function toggleHints(taskId) {
+      const hintsEl = document.getElementById(`hints-${taskId}`);
+      hintsEl.classList.toggle('show');
+    }
+    
+    // 文字数カウント
+    function updateCharCount(taskId) {
+      const input = document.getElementById(`input-${taskId}`);
+      const count = document.getElementById(`count-${taskId}`);
+      count.textContent = `${input.value.length}文字`;
+    }
+    
+    // 英作文の評価
+    async function evaluateWriting(taskId, japaneseText) {
+      const input = document.getElementById(`input-${taskId}`);
+      const userAnswer = input.value.trim();
+      
+      if (!userAnswer) {
+        alert('英文を入力してください');
+        return;
+      }
+      
+      const button = document.getElementById(`evaluate-${taskId}`);
+      const spinner = button.querySelector('.loading-spinner');
+      
+      // ローディング状態
+      button.disabled = true;
+      spinner.style.display = 'inline-block';
+      
+      try {
+        // 評価APIを呼び出し
+        const response = await fetch('/api/evaluate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            answer: userAnswer,
+            question: `次の日本語を英語に訳してください: ${japaneseText}`,
+            lessonType: '英作文',
+            expectedAnswer: 'Various correct answers are possible'
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          displayResult(taskId, result.evaluation);
+          
+          // タスク完了処理
+          const taskCard = document.getElementById(`task-${taskId}`);
+          taskCard.classList.remove('active');
+          taskCard.classList.add('completed');
+          
+          // ポイント加算
+          const task = taskData.find(t => t.id === taskId);
+          if (task && result.evaluation.score >= 60) {
+            totalPoints += task.points;
+            document.getElementById('totalPoints').textContent = `${totalPoints} pt`;
+          }
+          
+          // 進捗更新
+          completedTasks++;
+          updateProgress();
+          
+          // 次のタスクをアクティブに
+          const nextTask = document.querySelector('.task-card:not(.completed)');
+          if (nextTask) {
+            nextTask.classList.add('active');
+            nextTask.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } else {
+          throw new Error(result.error || 'Evaluation failed');
+        }
+      } catch (error) {
+        console.error('Evaluation error:', error);
+        alert('評価中にエラーが発生しました。もう一度お試しください。');
+      } finally {
+        button.disabled = false;
+        spinner.style.display = 'none';
+      }
+    }
+    
+    // 結果表示
+    function displayResult(taskId, evaluation) {
+      const resultEl = document.getElementById(`result-${taskId}`);
+      
+      // スコアに応じたクラス
+      let scoreClass = '';
+      if (evaluation.score >= 90) scoreClass = 'score-excellent';
+      else if (evaluation.score >= 70) scoreClass = 'score-good';
+      else if (evaluation.score >= 50) scoreClass = 'score-fair';
+      else scoreClass = 'score-poor';
+      
+      resultEl.innerHTML = `
+        <div class="result-header">
+          <h3 style="font-size: 16px; color: var(--navy);">評価結果</h3>
+          <div class="score-badge ${scoreClass}">${evaluation.score}点</div>
+        </div>
+        
+        <div class="feedback-item">
+          <div class="feedback-label">
+            <span>📝</span>
+            <span>文法</span>
+          </div>
+          <div class="feedback-text">${evaluation.feedback.grammar}</div>
+        </div>
+        
+        <div class="feedback-item">
+          <div class="feedback-label">
+            <span>📚</span>
+            <span>語彙</span>
+          </div>
+          <div class="feedback-text">${evaluation.feedback.vocabulary}</div>
+        </div>
+        
+        <div class="feedback-item">
+          <div class="feedback-label">
+            <span>✨</span>
+            <span>良かった点</span>
+          </div>
+          <div class="feedback-text">${evaluation.feedback.positives}</div>
+        </div>
+        
+        <div class="feedback-item">
+          <div class="feedback-label">
+            <span>🎯</span>
+            <span>改善点</span>
+          </div>
+          <div class="feedback-text">${evaluation.feedback.improvements}</div>
+        </div>
+        
+        ${evaluation.correctedAnswer ? `
+          <div class="corrected-answer">
+            <div class="corrected-label">模範解答例</div>
+            <div class="corrected-text">${evaluation.correctedAnswer}</div>
+          </div>
+        ` : ''}
+      `;
+      
+      resultEl.classList.add('show');
+    }
+    
+    // タスクをスキップ
+    function skipTask(taskId) {
+      const taskCard = document.getElementById(`task-${taskId}`);
+      taskCard.classList.remove('active');
+      
+      // 次のタスクをアクティブに
+      const nextTask = document.querySelector('.task-card:not(.completed):not(.active)');
+      if (nextTask) {
+        nextTask.classList.add('active');
+        nextTask.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    
+    // 進捗更新
+    function updateProgress() {
+      const progressText = document.getElementById('progressText');
+      progressText.textContent = `${completedTasks}/${taskData.length}問完了`;
+      
+      // 全問完了チェック
+      if (completedTasks === taskData.length) {
+        document.getElementById('completionMessage').style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

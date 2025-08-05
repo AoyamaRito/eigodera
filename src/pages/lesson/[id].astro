@@ -576,6 +576,9 @@ const userProgress = {
           <div class="practice-box">
             <div class="practice-label">練習</div>
             <div class="practice-content">{section.practice}</div>
+            <a href={`/lesson/practice?lesson=${lessonId}&section=${index + 1}`} class="practice-link">
+              この練習を始める →
+            </a>
           </div>
         </div>
       ))}
@@ -600,7 +603,9 @@ const userProgress = {
     
     <!-- アクションボタン -->
     <div class="action-buttons">
-      <button class="btn btn-secondary" onclick="saveProgress()">進捗を保存</button>
+      <button class="btn btn-secondary" onclick="window.location.href=`/lesson/writing?lesson=${lessonId}`">
+        英作文練習へ
+      </button>
       <button class="btn btn-primary" onclick="completeLesson()">レッスン完了</button>
     </div>
     
