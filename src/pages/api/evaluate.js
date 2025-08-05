@@ -48,18 +48,6 @@ export async function POST({ request }) {
 6. 推奨される練習方法
 
 回答は日本語で、初級者にも分かりやすく説明してください。
-JSON形式で返してください：
-{
-  "score": 数値,
-  "feedback": {
-    "grammar": "文法についてのフィードバック",
-    "vocabulary": "語彙についてのフィードバック",
-    "improvements": "改善点",
-    "positives": "良かった点",
-    "practice": "推奨される練習方法"
-  },
-  "correctedAnswer": "修正された回答例"
-}
               `
             }]
           }],
@@ -68,6 +56,30 @@ JSON形式で返してください：
             topK: 40,
             topP: 0.95,
             maxOutputTokens: 1024,
+            response_mime_type: "application/json",
+            response_schema: {
+              type: "object",
+              properties: {
+                score: {
+                  type: "number",
+                  minimum: 0,
+                  maximum: 100
+                },
+                feedback: {
+                  type: "object",
+                  properties: {
+                    grammar: { type: "string" },
+                    vocabulary: { type: "string" },
+                    improvements: { type: "string" },
+                    positives: { type: "string" },
+                    practice: { type: "string" }
+                  },
+                  required: ["grammar", "vocabulary", "improvements", "positives", "practice"]
+                },
+                correctedAnswer: { type: "string" }
+              },
+              required: ["score", "feedback", "correctedAnswer"]
+            }
           }
         })
       }
@@ -79,33 +91,10 @@ JSON形式で返してください：
 
     const geminiData = await geminiResponse.json();
     
-    // レスポンスからJSONを抽出
-    let evaluationText = geminiData.candidates[0].content.parts[0].text;
-    
-    // JSONの抽出（コードブロックがある場合）
-    const jsonMatch = evaluationText.match(/```json\n?([\s\S]*?)\n?```/);
-    if (jsonMatch) {
-      evaluationText = jsonMatch[1];
-    }
-    
-    // JSONとしてパース
-    let evaluation;
-    try {
-      evaluation = JSON.parse(evaluationText);
-    } catch (e) {
-      // パースに失敗した場合、簡易的な評価を返す
-      evaluation = {
-        score: 70,
-        feedback: {
-          grammar: "評価を処理中にエラーが発生しました",
-          vocabulary: "再度お試しください",
-          improvements: "システムエラー",
-          positives: "回答ありがとうございました",
-          practice: "もう一度挑戦してみてください"
-        },
-        correctedAnswer: expectedAnswer
-      };
-    }
+    // response_mime_typeを使用しているため、直接JSONとして返される
+    const evaluation = geminiData.candidates[0].content.parts[0].text 
+      ? JSON.parse(geminiData.candidates[0].content.parts[0].text)
+      : geminiData.candidates[0].content.parts[0];
 
     return new Response(JSON.stringify({
       success: true,
