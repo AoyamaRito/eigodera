@@ -1,0 +1,809 @@
+---
+// AI-First開発原則：練習問題ページ（Gemini採点機能付き）
+// 英作文や発音練習の回答を評価
+
+const lessonId = Astro.url.searchParams.get('lesson') || '1';
+const sectionId = Astro.url.searchParams.get('section') || '1';
+
+// 練習問題データ
+const practiceData = {
+  '1-1': {
+    type: '英作文',
+    title: '自己紹介を英語で',
+    instruction: '簡単な自己紹介を英語で書いてみましょう。名前、職業、趣味について話してください。',
+    example: 'Hello, my name is [Your Name]. I work as a [Your Job]. In my free time, I enjoy [Your Hobby].',
+    hints: [
+      'I am... / My name is...',
+      'I work as... / I am a...',
+      'I like... / I enjoy... / My hobby is...'
+    ]
+  },
+  '2-1': {
+    type: '発音練習',
+    title: 'RとLの音を含む文章',
+    instruction: '以下の文章を音読して録音してください：',
+    example: 'The red light really looks lovely.',
+    hints: [
+      'Rは舌を巻いて',
+      'Lは舌先を上の歯茎に',
+      'ゆっくり練習してから速く'
+    ]
+  },
+  '3-1': {
+    type: '文法練習',
+    title: 'haveを使った文章作成',
+    instruction: '「have」を使って、今日の予定を3つ書いてください。',
+    example: 'I have a meeting at 10 AM. I have lunch with my colleague. I have to finish my report.',
+    hints: [
+      'have + 名詞（持っている）',
+      'have to + 動詞（〜しなければならない）',
+      'have + 過去分詞（経験）'
+    ]
+  }
+};
+
+const currentPractice = practiceData[`${lessonId}-${sectionId}`] || practiceData['1-1'];
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>練習問題 - {currentPractice.title} | 英語の駆け込み寺</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --navy: #0F1B3C;
+      --light-navy: #1A2847;
+      --pale-navy: #2C3E5C;
+      --silver: #C0C0C0;
+      --light-silver: #E8E8E8;
+      --copper-light: #FFB380;
+      --copper-dark: #D35400;
+      --white: #FFFFFF;
+      --off-white: #F8F9FA;
+      --text-gray: #6C757D;
+      --success: #27AE60;
+      --error: #E74C3C;
+      --warning: #F39C12;
+      --info: #3498DB;
+    }
+    
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      background: var(--off-white);
+      color: var(--navy);
+      line-height: 1.7;
+    }
+    
+    .practice-container {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--white);
+    }
+    
+    /* ヘッダー */
+    .practice-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .back-button {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .header-info {
+      flex: 1;
+    }
+    
+    .practice-type {
+      font-size: 12px;
+      color: var(--copper-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .practice-title {
+      font-size: 18px;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    
+    /* メインコンテンツ */
+    .practice-content {
+      padding: 20px;
+    }
+    
+    .instruction-card {
+      background: var(--off-white);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      border-left: 4px solid var(--copper-light);
+    }
+    
+    .instruction-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    
+    .instruction-text {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+    
+    /* 例文表示 */
+    .example-section {
+      background: var(--pale-navy);
+      color: var(--white);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+    }
+    
+    .example-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+    
+    .example-text {
+      font-size: 16px;
+      line-height: 1.6;
+      font-style: italic;
+    }
+    
+    /* ヒント */
+    .hints-section {
+      margin-bottom: 25px;
+    }
+    
+    .hints-title {
+      font-size: 14px;
+      color: var(--navy);
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .hint-list {
+      list-style: none;
+    }
+    
+    .hint-item {
+      background: var(--off-white);
+      padding: 10px 15px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-gray);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .hint-icon {
+      color: var(--copper-dark);
+      font-size: 16px;
+    }
+    
+    /* 回答エリア */
+    .answer-section {
+      margin-bottom: 25px;
+    }
+    
+    .answer-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    
+    .answer-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 15px;
+      border: 2px solid var(--light-silver);
+      border-radius: 12px;
+      font-size: 16px;
+      line-height: 1.6;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+    
+    .answer-textarea:focus {
+      outline: none;
+      border-color: var(--copper-light);
+      box-shadow: 0 0 0 3px rgba(255, 179, 128, 0.1);
+    }
+    
+    /* 音声録音UI（発音練習用） */
+    .recording-section {
+      background: var(--off-white);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    
+    .record-button {
+      width: 80px;
+      height: 80px;
+      background: var(--error);
+      color: var(--white);
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .record-button:hover {
+      transform: scale(1.05);
+    }
+    
+    .record-button.recording {
+      background: var(--copper-dark);
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(213, 84, 0, 0.7); }
+      70% { box-shadow: 0 0 0 20px rgba(213, 84, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(213, 84, 0, 0); }
+    }
+    
+    .recording-status {
+      font-size: 14px;
+      color: var(--text-gray);
+    }
+    
+    /* 提出ボタン */
+    .submit-section {
+      padding: 20px;
+      position: sticky;
+      bottom: 0;
+      background: var(--white);
+      border-top: 1px solid var(--light-silver);
+    }
+    
+    .submit-button {
+      width: 100%;
+      padding: 16px;
+      background: var(--copper-dark);
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .submit-button:hover {
+      background: var(--copper-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(213, 84, 0, 0.3);
+    }
+    
+    .submit-button:disabled {
+      background: var(--light-silver);
+      color: var(--text-gray);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    /* 評価結果モーダル */
+    .evaluation-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 27, 60, 0.95);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .evaluation-modal.active {
+      display: flex;
+    }
+    
+    .evaluation-card {
+      background: var(--white);
+      border-radius: 20px;
+      max-width: 440px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .evaluation-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 25px;
+      border-radius: 20px 20px 0 0;
+      text-align: center;
+    }
+    
+    .score-display {
+      font-size: 48px;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+    
+    .score-label {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    
+    /* スコアに応じた色分け */
+    .score-excellent { color: var(--success); }
+    .score-good { color: var(--copper-light); }
+    .score-fair { color: var(--warning); }
+    .score-poor { color: var(--error); }
+    
+    .evaluation-content {
+      padding: 25px;
+    }
+    
+    .feedback-section {
+      margin-bottom: 20px;
+    }
+    
+    .feedback-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .feedback-text {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      padding-left: 24px;
+    }
+    
+    .corrected-answer {
+      background: var(--off-white);
+      padding: 15px;
+      border-radius: 12px;
+      border-left: 4px solid var(--success);
+      margin-top: 20px;
+    }
+    
+    .corrected-label {
+      font-size: 12px;
+      color: var(--success);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .corrected-text {
+      font-size: 14px;
+      color: var(--navy);
+      line-height: 1.6;
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+    
+    .modal-button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-button.primary {
+      background: var(--copper-dark);
+      color: var(--white);
+    }
+    
+    .modal-button.secondary {
+      background: var(--light-silver);
+      color: var(--navy);
+    }
+    
+    /* ローディング */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--white);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* PC用の装飾線 */
+    @media (min-width: 1000px) {
+      body::before,
+      body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: transparent;
+        border-left: 6px dashed var(--navy);
+        opacity: 0.3;
+        z-index: 10;
+      }
+      
+      body::before {
+        left: calc(50% - 500px);
+      }
+      
+      body::after {
+        right: calc(50% - 500px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="practice-container">
+    <!-- ヘッダー -->
+    <header class="practice-header">
+      <div class="header-content">
+        <div class="back-button" onclick="history.back()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </div>
+        <div class="header-info">
+          <div class="practice-type">{currentPractice.type}</div>
+          <h1 class="practice-title">{currentPractice.title}</h1>
+        </div>
+      </div>
+    </header>
+    
+    <!-- メインコンテンツ -->
+    <main class="practice-content">
+      <!-- 説明 -->
+      <div class="instruction-card">
+        <h2 class="instruction-title">練習内容</h2>
+        <p class="instruction-text">{currentPractice.instruction}</p>
+      </div>
+      
+      <!-- 例文 -->
+      <div class="example-section">
+        <div class="example-label">例文 / Example</div>
+        <div class="example-text">{currentPractice.example}</div>
+      </div>
+      
+      <!-- ヒント -->
+      <div class="hints-section">
+        <h3 class="hints-title">
+          <span>💡</span>
+          <span>ヒント</span>
+        </h3>
+        <ul class="hint-list">
+          {currentPractice.hints.map(hint => (
+            <li class="hint-item">
+              <span class="hint-icon">•</span>
+              <span>{hint}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      
+      <!-- 回答エリア -->
+      {currentPractice.type !== '発音練習' ? (
+        <div class="answer-section">
+          <label class="answer-label">あなたの回答</label>
+          <textarea 
+            class="answer-textarea" 
+            id="userAnswer"
+            placeholder="ここに回答を入力してください..."
+          ></textarea>
+        </div>
+      ) : (
+        <div class="recording-section">
+          <button class="record-button" id="recordButton" onclick="toggleRecording()">
+            <span id="recordIcon">🎤</span>
+          </button>
+          <div class="recording-status" id="recordingStatus">
+            クリックして録音開始
+          </div>
+        </div>
+      )}
+    </main>
+    
+    <!-- 提出ボタン -->
+    <div class="submit-section">
+      <button class="submit-button" id="submitButton" onclick="submitAnswer()">
+        <span>回答を提出</span>
+        <span id="submitLoader" class="loading-spinner" style="display: none;"></span>
+      </button>
+    </div>
+    
+    <!-- 評価結果モーダル -->
+    <div class="evaluation-modal" id="evaluationModal">
+      <div class="evaluation-card">
+        <div class="evaluation-header">
+          <div class="score-display" id="scoreDisplay">--</div>
+          <div class="score-label">スコア</div>
+        </div>
+        
+        <div class="evaluation-content">
+          <!-- 文法フィードバック -->
+          <div class="feedback-section">
+            <h4 class="feedback-title">
+              <span>📝</span>
+              <span>文法</span>
+            </h4>
+            <p class="feedback-text" id="grammarFeedback">評価中...</p>
+          </div>
+          
+          <!-- 語彙フィードバック -->
+          <div class="feedback-section">
+            <h4 class="feedback-title">
+              <span>📚</span>
+              <span>語彙</span>
+            </h4>
+            <p class="feedback-text" id="vocabularyFeedback">評価中...</p>
+          </div>
+          
+          <!-- 良かった点 -->
+          <div class="feedback-section">
+            <h4 class="feedback-title">
+              <span>✨</span>
+              <span>良かった点</span>
+            </h4>
+            <p class="feedback-text" id="positivesFeedback">評価中...</p>
+          </div>
+          
+          <!-- 改善点 -->
+          <div class="feedback-section">
+            <h4 class="feedback-title">
+              <span>🎯</span>
+              <span>改善点</span>
+            </h4>
+            <p class="feedback-text" id="improvementsFeedback">評価中...</p>
+          </div>
+          
+          <!-- 練習方法 -->
+          <div class="feedback-section">
+            <h4 class="feedback-title">
+              <span>💪</span>
+              <span>推奨される練習方法</span>
+            </h4>
+            <p class="feedback-text" id="practiceFeedback">評価中...</p>
+          </div>
+          
+          <!-- 修正された回答 -->
+          <div class="corrected-answer" id="correctedSection" style="display: none;">
+            <div class="corrected-label">修正例</div>
+            <div class="corrected-text" id="correctedAnswer"></div>
+          </div>
+          
+          <!-- アクション -->
+          <div class="modal-actions">
+            <button class="modal-button secondary" onclick="closeModal()">
+              もう一度挑戦
+            </button>
+            <button class="modal-button primary" onclick="nextPractice()">
+              次の練習へ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let isRecording = false;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    
+    // 録音機能
+    async function toggleRecording() {
+      const recordButton = document.getElementById('recordButton');
+      const recordIcon = document.getElementById('recordIcon');
+      const recordingStatus = document.getElementById('recordingStatus');
+      
+      if (!isRecording) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+          
+          mediaRecorder.addEventListener('dataavailable', event => {
+            audioChunks.push(event.data);
+          });
+          
+          mediaRecorder.addEventListener('stop', () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            // 音声データを処理（実際の実装では音声認識APIに送信）
+            console.log('Recording completed', audioBlob);
+          });
+          
+          mediaRecorder.start();
+          isRecording = true;
+          recordButton.classList.add('recording');
+          recordIcon.textContent = '⏹️';
+          recordingStatus.textContent = '録音中... クリックで停止';
+        } catch (error) {
+          console.error('Recording error:', error);
+          alert('マイクへのアクセスが許可されていません');
+        }
+      } else {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        isRecording = false;
+        recordButton.classList.remove('recording');
+        recordIcon.textContent = '🎤';
+        recordingStatus.textContent = '録音完了！';
+      }
+    }
+    
+    // 回答提出
+    async function submitAnswer() {
+      const submitButton = document.getElementById('submitButton');
+      const submitLoader = document.getElementById('submitLoader');
+      const userAnswer = document.getElementById('userAnswer')?.value || '音声回答';
+      
+      if (!userAnswer.trim() && currentPractice.type !== '発音練習') {
+        alert('回答を入力してください');
+        return;
+      }
+      
+      // ローディング状態
+      submitButton.disabled = true;
+      submitLoader.style.display = 'inline-block';
+      
+      try {
+        // Gemini APIを呼び出し
+        const response = await fetch('/api/evaluate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            answer: userAnswer,
+            question: currentPractice.instruction,
+            lessonType: currentPractice.type,
+            expectedAnswer: currentPractice.example
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          displayEvaluation(result.evaluation);
+        } else {
+          throw new Error(result.error || 'Evaluation failed');
+        }
+      } catch (error) {
+        console.error('Submit error:', error);
+        alert('評価中にエラーが発生しました。もう一度お試しください。');
+      } finally {
+        submitButton.disabled = false;
+        submitLoader.style.display = 'none';
+      }
+    }
+    
+    // 評価結果表示
+    function displayEvaluation(evaluation) {
+      const modal = document.getElementById('evaluationModal');
+      const scoreDisplay = document.getElementById('scoreDisplay');
+      
+      // スコア表示
+      scoreDisplay.textContent = evaluation.score + '点';
+      
+      // スコアに応じた色分け
+      scoreDisplay.className = 'score-display';
+      if (evaluation.score >= 90) {
+        scoreDisplay.classList.add('score-excellent');
+      } else if (evaluation.score >= 70) {
+        scoreDisplay.classList.add('score-good');
+      } else if (evaluation.score >= 50) {
+        scoreDisplay.classList.add('score-fair');
+      } else {
+        scoreDisplay.classList.add('score-poor');
+      }
+      
+      // フィードバック表示
+      document.getElementById('grammarFeedback').textContent = evaluation.feedback.grammar;
+      document.getElementById('vocabularyFeedback').textContent = evaluation.feedback.vocabulary;
+      document.getElementById('positivesFeedback').textContent = evaluation.feedback.positives;
+      document.getElementById('improvementsFeedback').textContent = evaluation.feedback.improvements;
+      document.getElementById('practiceFeedback').textContent = evaluation.feedback.practice;
+      
+      // 修正例表示
+      if (evaluation.correctedAnswer) {
+        document.getElementById('correctedSection').style.display = 'block';
+        document.getElementById('correctedAnswer').textContent = evaluation.correctedAnswer;
+      }
+      
+      // モーダル表示
+      modal.classList.add('active');
+    }
+    
+    // モーダルを閉じる
+    function closeModal() {
+      document.getElementById('evaluationModal').classList.remove('active');
+      // 回答をクリア
+      const userAnswer = document.getElementById('userAnswer');
+      if (userAnswer) {
+        userAnswer.value = '';
+      }
+    }
+    
+    // 次の練習へ
+    function nextPractice() {
+      // 実際の実装では次の練習問題へ遷移
+      window.location.href = `/lesson/${lessonId}`;
+    }
+    
+    // 現在の練習データを定義
+    const currentPractice = {currentPractice};
+  </script>
+</body>
+</html>
