@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英語の駆け込み寺 - TOEICスコアアップと実用英語の最短ルート</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --navy: #0F1B3C;
+      --light-navy: #1A2847;
+      --pale-navy: #2C3E5C;
+      --silver: #C0C0C0;
+      --light-silver: #E8E8E8;
+      --copper-light: #FFB380;  /* ネイビー背景用（明るめ） */
+      --copper-dark: #D35400;   /* 白背景用（暗め） */
+      --white: #FFFFFF;
+      --off-white: #F8F9FA;
+      --text-gray: #6C757D;
+    }
+    
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      background: var(--white);
+      color: var(--navy);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    
+    /* ヒーローセクション */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--pale-navy) 100%);
+      color: var(--white);
+      padding: 40px 20px 50px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 179, 128, 0.1) 0%, transparent 70%);
+    }
+    
+    .hero-accent {
+      display: inline-block;
+      width: 60px;
+      height: 4px;
+      background: var(--copper);
+      margin-bottom: 20px;
+    }
+    
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero .subtitle {
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      color: var(--copper-light);
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    
+    .hero-cta {
+      background: var(--copper-light);
+      color: var(--navy);
+      border: none;
+      padding: 18px 50px;
+      border-radius: 0;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 179, 128, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 179, 128, 0.4);
+    }
+    
+    /* 特徴セクション */
+    .features {
+      background: var(--white);
+      padding: 40px 20px;
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 22px;
+      color: var(--navy);
+      margin-bottom: 30px;
+      font-weight: 400;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 3px;
+      background: var(--copper-dark);
+    }
+    
+    .feature-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(15, 27, 60, 0.08);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .feature-highlight {
+      background: var(--white);
+      color: var(--navy);
+      border: 2px solid var(--navy);
+    }
+    
+    .feature-highlight .feature-title {
+      color: var(--navy);
+    }
+    
+    .feature-highlight .feature-description {
+      color: var(--text-gray);
+    }
+    
+    .feature-highlight .feature-icon {
+      display: none;
+    }
+    
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 80px;
+      background: var(--copper-dark);
+      opacity: 0.05;
+      border-radius: 0 0 0 100%;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--copper-light);
+      border-width: 3px;
+      border-style: dashed;
+    }
+    
+    .feature-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(211, 84, 0, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: var(--copper-dark);
+    }
+    
+    .feature-title {
+      font-size: 20px;
+      color: var(--navy);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    
+    .feature-description {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.8;
+    }
+    
+    /* 引用セクション */
+    .quote-section {
+      background: var(--pale-navy);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .quote-box {
+      background: transparent;
+      border-radius: 0;
+      padding: 30px 25px;
+      position: relative;
+      border: 2px dashed var(--copper-light);
+      opacity: 0.9;
+    }
+    
+    .quote-box::before {
+      content: '"';
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 60px;
+      color: var(--copper-light);
+      opacity: 0.3;
+    }
+    
+    .quote-text {
+      font-size: 18px;
+      color: var(--white);
+      font-style: italic;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+    
+    .quote-author {
+      font-size: 14px;
+      color: var(--light-silver);
+    }
+    
+    /* メソッドセクション */
+    .method {
+      background: var(--white);
+      padding: 40px 20px;
+    }
+    
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    .method-item {
+      background: linear-gradient(135deg, var(--white) 0%, rgba(44, 62, 92, 0.02) 100%);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 20px 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .method-item:hover {
+      border-color: var(--copper-light);
+      transform: translateY(-3px);
+      border-width: 3px;
+      border-style: dashed;
+    }
+    
+    .method-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--copper-dark);
+      color: var(--white);
+      border-radius: 50%;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .method-name {
+      font-size: 14px;
+      color: var(--navy);
+      font-weight: 500;
+    }
+    
+    /* CTAセクション */
+    .cta-section {
+      background: linear-gradient(135deg, var(--pale-navy) 0%, var(--navy) 100%);
+      color: var(--white);
+      padding: 50px 20px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: radial-gradient(ellipse at center bottom, rgba(192, 192, 192, 0.2) 0%, transparent 70%);
+    }
+    
+    .cta-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+    
+    .cta-subtitle {
+      font-size: 16px;
+      color: var(--silver);
+      margin-bottom: 30px;
+    }
+    
+    .cta-button {
+      background: var(--white);
+      color: var(--navy);
+      border: none;
+      padding: 20px 60px;
+      border-radius: 0;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(255, 255, 255, 0.3);
+    }
+    
+    /* フッター */
+    footer {
+      background: var(--white);
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 1px solid var(--light-silver);
+    }
+    
+    .footer-logo {
+      font-size: 20px;
+      color: var(--navy);
+      margin-bottom: 10px;
+      font-weight: 300;
+    }
+    
+    .footer-text {
+      font-size: 12px;
+      color: var(--text-gray);
+    }
+    
+    /* アニメーション */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate {
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    /* PC用の装飾線 */
+    @media (min-width: 1000px) {
+      body::before,
+      body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: transparent;
+        border-left: 6px dashed var(--navy);
+        opacity: 0.6;
+        z-index: 10;
+      }
+      
+      body::before {
+        left: calc(50% - 500px);
+      }
+      
+      body::after {
+        right: calc(50% - 500px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヒーローセクション -->
+    <section class="hero">
+      <div class="hero-accent"></div>
+      <h1>英語の駆け込み寺</h1>
+      <p class="subtitle">TOEIC 400点少しで困っている方へ</p>
+      <button class="hero-cta">今すぐ駆け込む</button>
+      <p style="margin-top: 20px; font-size: 14px; color: var(--copper-light); opacity: 0.9;">月額5,000円〜 / 1週間無料体験</p>
+    </section>
+    
+    <!-- 特徴セクション -->
+    <section class="features">
+      <h2 class="section-title">英語学習のお悩み、解決します</h2>
+      
+      <div class="feature-card animate">
+        <div class="feature-icon">
+          <img src="icon/ヘルプ.png" alt="緊急サポート" style="width: 30px; height: 30px;">
+        </div>
+        <h3 class="feature-title">TOEIC 400点から600点へ</h3>
+        <p class="feature-description">
+          TOEIC 400点少しで困っている方を、600点以上に引き上げるための専門プログラム。「かけ込み寺」メソッドで短期間でのスコアアップを実現します。
+        </p>
+      </div>
+      
+      <div class="feature-card animate">
+        <div class="feature-icon">
+          <img src="icon/青の本.png" alt="目的別学習" style="width: 30px; height: 30px;">
+        </div>
+        <h3 class="feature-title">カリスマ講師の直伝メソッド</h3>
+        <p class="feature-description">
+          片野拓夫氏直伝の「かけ込み寺」メソッドをAI化。TOEIC満点講師の知識と経験を、いつでもどこでも受けられます。
+        </p>
+      </div>
+      
+      <div class="feature-card feature-highlight animate">
+        <h3 class="feature-title">国際英語の仲間入り</h3>
+        <p class="feature-description">
+          単なる試験対策ではなく、実際に使える「国際英語」を身につけます。世界で通用する英語力で、あなたの可能性を広げましょう。
+        </p>
+      </div>
+    </section>
+    
+    <!-- 引用セクション -->
+    <section class="quote-section">
+      <div class="quote-box">
+        <p class="quote-text">
+          "The best time to plant a tree was 20 years ago. The second best time is now."
+        </p>
+        <p class="quote-author">— Chinese Proverb</p>
+      </div>
+    </section>
+    
+    <!-- メソッドセクション -->
+    <section class="method">
+      <h2 class="section-title">かけ込み寺式 4つの学習法</h2>
+      
+      <div class="method-grid">
+        <div class="method-item">
+          <div class="method-number">
+            <img src="icon/赤いマグカップ.png" alt="リスニング" style="width: 20px; height: 20px; filter: brightness(0) invert(1);">
+          </div>
+          <p class="method-name">音読トレーニング</p>
+        </div>
+        <div class="method-item">
+          <div class="method-number">
+            <img src="icon/インフォメーション.png" alt="スピーキング" style="width: 20px; height: 20px; filter: brightness(0) invert(1);">
+          </div>
+          <p class="method-name">瞬間英作文</p>
+        </div>
+        <div class="method-item">
+          <div class="method-number">
+            <img src="icon/新聞.png" alt="文法" style="width: 20px; height: 20px; filter: brightness(0) invert(1);">
+          </div>
+          <p class="method-name">文法の急所</p>
+        </div>
+        <div class="method-item">
+          <div class="method-number">
+            <img src="icon/虫めがね.png" alt="語彙" style="width: 20px; height: 20px; filter: brightness(0) invert(1);">
+          </div>
+          <p class="method-name">単語のかけ込み</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- CTAセクション -->
+    <section class="cta-section">
+      <h2 class="cta-title">英語のお悩み、今すぐ解決しませんか？</h2>
+      <p class="cta-subtitle">TOEIC 600点の場合、年収が平均100万円アップするというデータも。</p>
+      <p style="margin-top: 20px; font-size: 20px; color: var(--copper-light); font-weight: 600;">月額5,000円〜</p>
+      <p style="margin-top: 10px; font-size: 16px; color: var(--silver);">まずは1週間の無料体験から</p>
+      <button class="cta-button">1週間無料で始める</button>
+    </section>
+    
+    <!-- フッター -->
+    <footer>
+      <div class="footer-logo">英語の駆け込み寺</div>
+      <p class="footer-text">© 2024 株式会社ソリスト合唱団. All rights reserved.</p>
+      <p style="margin-top: 20px;">
+        <a href="tokushoho.html" style="color: var(--copper-dark); text-decoration: none; font-size: 14px;">特定商取引法に基づく表記</a>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

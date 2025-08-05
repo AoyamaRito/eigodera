@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英語の駆け込み寺 - デザイン提案</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    .sample {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      max-width: 480px;
+      margin: 0 auto 100px;
+      background: #36454F;
+      color: #F9F7F4;
+    }
+    
+    h1 {
+      text-align: center;
+      padding: 40px 20px 20px;
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+    }
+    
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      opacity: 0.8;
+      padding: 0 20px 40px;
+    }
+    
+    .pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(183, 110, 121, 0.05) 10px,
+        rgba(183, 110, 121, 0.05) 20px
+      );
+    }
+    
+    /* 英文表示エリア */
+    .english-content {
+      padding: 20px;
+      margin: 20px;
+      border-radius: 12px;
+      position: relative;
+    }
+    
+    .quote {
+      font-size: 20px;
+      line-height: 1.8;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      margin-bottom: 15px;
+    }
+    
+    .author {
+      text-align: right;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+    
+    /* パターン1: アクセントカラーに温かみのあるゴールド */
+    .proposal1 .english-content {
+      background: rgba(218, 165, 32, 0.1);
+      border: 1px solid rgba(218, 165, 32, 0.3);
+    }
+    
+    .proposal1 .quote {
+      color: #F9F7F4;
+    }
+    
+    .proposal1 .highlight {
+      color: #DAA520;
+      font-weight: 500;
+    }
+    
+    .proposal1 .cta-button {
+      background: #B76E79;
+      color: #F9F7F4;
+      border: none;
+      padding: 20px 60px;
+      border-radius: 8px;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      margin: 40px auto;
+      display: block;
+    }
+    
+    /* パターン2: アクセントカラーにミントグリーン */
+    .proposal2 .english-content {
+      background: rgba(152, 251, 152, 0.08);
+      border: 1px solid rgba(152, 251, 152, 0.2);
+    }
+    
+    .proposal2 .quote {
+      color: #F9F7F4;
+    }
+    
+    .proposal2 .highlight {
+      color: #98FB98;
+      font-weight: 500;
+    }
+    
+    .proposal2 .cta-button {
+      background: linear-gradient(135deg, #B76E79, #98FB98);
+      color: #36454F;
+      border: none;
+      padding: 20px 60px;
+      border-radius: 8px;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      margin: 40px auto;
+      display: block;
+      font-weight: 600;
+    }
+    
+    /* パターン3: アクセントカラーにラベンダー */
+    .proposal3 .english-content {
+      background: rgba(230, 230, 250, 0.08);
+      border-left: 4px solid #E6E6FA;
+      border-radius: 0;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    
+    .proposal3 .quote {
+      color: #F9F7F4;
+    }
+    
+    .proposal3 .highlight {
+      background: rgba(230, 230, 250, 0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    
+    .proposal3 .cta-button {
+      background: #B76E79;
+      color: #F9F7F4;
+      border: 2px solid #E6E6FA;
+      padding: 20px 60px;
+      border-radius: 8px;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      margin: 40px auto;
+      display: block;
+    }
+    
+    /* 日本語訳 */
+    .translation {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(249, 247, 244, 0.2);
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin: 60px 0 20px;
+      font-size: 18px;
+      color: #B76E79;
+    }
+  </style>
+</head>
+<body>
+  <!-- 提案1: ゴールドアクセント -->
+  <div class="sample proposal1">
+    <div class="pattern"></div>
+    <h1>英語の駆け込み寺</h1>
+    <p class="subtitle">ENGLISH SANCTUARY</p>
+    
+    <div class="english-content">
+      <p class="quote">
+        "The limits of my <span class="highlight">language</span> mean the limits of my <span class="highlight">world</span>."
+      </p>
+      <p class="author">— Ludwig Wittgenstein</p>
+      <div class="translation">
+        「私の言語の限界は、私の世界の限界を意味する」
+      </div>
+    </div>
+    
+    <p class="section-title">提案1: 温かみのあるゴールドをアクセントに</p>
+    <button class="cta-button">学習を始める</button>
+  </div>
+  
+  <!-- 提案2: ミントグリーンアクセント -->
+  <div class="sample proposal2">
+    <div class="pattern"></div>
+    <h1>英語の駆け込み寺</h1>
+    <p class="subtitle">ENGLISH SANCTUARY</p>
+    
+    <div class="english-content">
+      <p class="quote">
+        "A different <span class="highlight">language</span> is a different <span class="highlight">vision</span> of life."
+      </p>
+      <p class="author">— Federico Fellini</p>
+      <div class="translation">
+        「異なる言語は、人生の異なる見方である」
+      </div>
+    </div>
+    
+    <p class="section-title">提案2: 爽やかなミントグリーンで知的な印象</p>
+    <button class="cta-button">学習を始める</button>
+  </div>
+  
+  <!-- 提案3: ラベンダーアクセント -->
+  <div class="sample proposal3">
+    <div class="pattern"></div>
+    <h1>英語の駆け込み寺</h1>
+    <p class="subtitle">ENGLISH SANCTUARY</p>
+    
+    <div class="english-content">
+      <p class="quote">
+        "Language is the <span class="highlight">road map</span> of a culture. It tells you where its people come from and <span class="highlight">where they are going</span>."
+      </p>
+      <p class="author">— Rita Mae Brown</p>
+      <div class="translation">
+        「言語は文化の道路地図である。それは人々がどこから来て、どこへ向かっているかを教えてくれる」
+      </div>
+    </div>
+    
+    <p class="section-title">提案3: 優雅なラベンダーで落ち着いた学習空間</p>
+    <button class="cta-button">学習を始める</button>
+  </div>
+</body>
+</html>

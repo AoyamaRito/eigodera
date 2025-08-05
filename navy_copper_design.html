@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英語の駆け込み寺 - ネイビー×銅色デザイン</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      background: #0F1B3C;
+      color: #F8F9FA;
+      min-height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    /* ヘッダー部分 */
+    .header {
+      position: relative;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .corner-accent {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border: 2px solid #C0C0C0;
+      border-radius: 50%;
+    }
+    
+    .copper-accent {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 40px;
+      height: 40px;
+      background: #FFB366;
+      border-radius: 8px;
+      opacity: 0.9;
+    }
+    
+    h1 {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      color: #FFB366;
+      opacity: 0.9;
+    }
+    
+    /* 英文エリア */
+    .quote-section {
+      padding: 40px 20px;
+      margin: 20px;
+      background: rgba(255, 179, 102, 0.05);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 179, 102, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .quote-section::before {
+      content: '"';
+      position: absolute;
+      top: -20px;
+      left: 10px;
+      font-size: 80px;
+      color: #FFB366;
+      opacity: 0.2;
+    }
+    
+    .english-quote {
+      font-size: 22px;
+      line-height: 1.8;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .highlight {
+      color: #FFB366;
+      font-weight: 500;
+      text-shadow: 0 0 20px rgba(255, 179, 102, 0.3);
+    }
+    
+    .author {
+      text-align: right;
+      font-size: 14px;
+      color: #C0C0C0;
+      margin-bottom: 20px;
+    }
+    
+    .translation {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #F8F9FA;
+      opacity: 0.8;
+      padding-top: 20px;
+      border-top: 1px solid rgba(192, 192, 192, 0.2);
+    }
+    
+    /* 学習コンテンツ例 */
+    .content-section {
+      padding: 20px;
+    }
+    
+    .lesson-card {
+      background: rgba(192, 192, 192, 0.05);
+      border: 1px solid rgba(192, 192, 192, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .lesson-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 60px;
+      background: #FFB366;
+      opacity: 0.1;
+      border-radius: 0 0 0 100%;
+    }
+    
+    .lesson-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #F8F9FA;
+    }
+    
+    .lesson-description {
+      font-size: 14px;
+      color: rgba(248, 249, 250, 0.7);
+      line-height: 1.6;
+    }
+    
+    /* CTA ボタン */
+    .cta-container {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .cta-button {
+      background: linear-gradient(135deg, #FFB366, #FFAA44);
+      color: #0F1B3C;
+      border: none;
+      padding: 20px 60px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(255, 179, 102, 0.3);
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(255, 179, 102, 0.4);
+    }
+    
+    .cta-button:active {
+      transform: translateY(0);
+    }
+    
+    /* デコレーション要素 */
+    .decoration-dots {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+    
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #C0C0C0;
+      opacity: 0.3;
+    }
+    
+    .dot:nth-child(2) {
+      background: #FFB366;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="corner-accent"></div>
+    <div class="copper-accent"></div>
+    <h1>英語の駆け込み寺</h1>
+    <p class="subtitle">ENGLISH SANCTUARY</p>
+  </div>
+  
+  <div class="quote-section">
+    <p class="english-quote">
+      "One <span class="highlight">language</span> sets you in a corridor for life. 
+      Two languages open every <span class="highlight">door</span> along the way."
+    </p>
+    <p class="author">— Frank Smith</p>
+    <div class="translation">
+      「一つの言語は人生の廊下にあなたを置く。<br>
+      二つの言語は、その道のすべてのドアを開く。」
+    </div>
+  </div>
+  
+  <div class="content-section">
+    <div class="lesson-card">
+      <h3 class="lesson-title">Daily Conversation</h3>
+      <p class="lesson-description">
+        日常会話で使える実践的なフレーズを、ネイティブスピーカーの音声と共に学びます。
+      </p>
+    </div>
+    
+    <div class="lesson-card">
+      <h3 class="lesson-title">Business English</h3>
+      <p class="lesson-description">
+        ビジネスシーンで必要な洗練された英語表現を身につけます。
+      </p>
+    </div>
+  </div>
+  
+  <div class="cta-container">
+    <button class="cta-button">今すぐ始める</button>
+  </div>
+  
+  <div class="decoration-dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</body>
+</html>

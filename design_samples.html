@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英語の駆け込み寺 - デザインサンプル</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    .sample {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    
+    .sample h1 {
+      text-align: center;
+      padding: 40px 20px 20px;
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+    }
+    
+    .sample .subtitle {
+      text-align: center;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      opacity: 0.8;
+      padding: 0 20px 40px;
+    }
+    
+    .sample .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .sample .cta-button {
+      padding: 20px 60px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .sample .cta-button:active {
+      transform: scale(0.95);
+    }
+    
+    /* パターン1: モノトーン + ゴールド */
+    .sample1 {
+      background: #1A1A1A;
+      color: #F5F5F5;
+    }
+    
+    .sample1 .cta-button {
+      background: #D4AF37;
+      color: #1A1A1A;
+      font-weight: 600;
+    }
+    
+    .sample1 .accent-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+    }
+    
+    /* パターン2: ネイビー + シルバー */
+    .sample2 {
+      background: #0F1B3C;
+      color: #F8F9FA;
+    }
+    
+    .sample2 .cta-button {
+      background: #C0C0C0;
+      color: #0F1B3C;
+      font-weight: 600;
+    }
+    
+    .sample2 .corner-accent {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border: 2px solid #C0C0C0;
+      border-radius: 50%;
+    }
+    
+    /* パターン3: 深緑 + 真鍮 */
+    .sample3 {
+      background: #1B3B36;
+      color: #FAF9F6;
+    }
+    
+    .sample3 .cta-button {
+      background: #B08D57;
+      color: #1B3B36;
+      font-weight: 600;
+    }
+    
+    .sample3 .frame {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border: 1px solid #B08D57;
+      pointer-events: none;
+    }
+    
+    /* パターン4: ワインレッド + プラチナ */
+    .sample4 {
+      background: #4A0E1E;
+      color: #FAFAFA;
+    }
+    
+    .sample4 .cta-button {
+      background: transparent;
+      color: #FAFAFA;
+      border: 2px solid #E5E5E5;
+      font-weight: 400;
+    }
+    
+    .sample4 h1 {
+      border-bottom: 1px solid rgba(229, 229, 229, 0.3);
+      padding-bottom: 30px;
+      margin: 0 40px;
+    }
+    
+    /* パターン5: チャコール + ローズゴールド */
+    .sample5 {
+      background: #36454F;
+      color: #F9F7F4;
+    }
+    
+    .sample5 .cta-button {
+      background: #B76E79;
+      color: #F9F7F4;
+      font-weight: 500;
+    }
+    
+    .sample5 .pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(183, 110, 121, 0.05) 10px,
+        rgba(183, 110, 121, 0.05) 20px
+      );
+    }
+    
+    /* ナビゲーション */
+    .nav {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      border-radius: 20px;
+    }
+    
+    .nav button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+    }
+    
+    .nav button.active {
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <!-- パターン1: モノトーン + ゴールド -->
+  <div class="sample sample1" id="sample1">
+    <div class="accent-line"></div>
+    <h1>英語の駆け込み寺</h1>
+    <p class="subtitle">ENGLISH SANCTUARY</p>
+    <div class="main-content">
+      <button class="cta-button">始める</button>
+    </div>
+  </div>
+  
+  <!-- パターン2: ネイビー + シルバー -->
+  <div class="sample sample2" id="sample2" style="display: none;">
+    <div class="corner-accent"></div>
+    <h1>英語の駆け込み寺</h1>
+    <p class="subtitle">ENGLISH SANCTUARY</p>
+    <div class="main-content">
+      <button class="cta-button">始める</button>
+    </div>
+  </div>
+  
+  <!-- パターン3: 深緑 + 真鍮 -->
+  <div class="sample sample3" id="sample3" style="display: none;">
+    <div class="frame"></div>
+    <h1>英語の駆け込み寺</h1>
+    <p class="subtitle">ENGLISH SANCTUARY</p>
+    <div class="main-content">
+      <button class="cta-button">始める</button>
+    </div>
+  </div>
+  
+  <!-- パターン4: ワインレッド + プラチナ -->
+  <div class="sample sample4" id="sample4" style="display: none;">
+    <h1>英語の駆け込み寺</h1>
+    <p class="subtitle">ENGLISH SANCTUARY</p>
+    <div class="main-content">
+      <button class="cta-button">始める</button>
+    </div>
+  </div>
+  
+  <!-- パターン5: チャコール + ローズゴールド -->
+  <div class="sample sample5" id="sample5" style="display: none;">
+    <div class="pattern"></div>
+    <h1>英語の駆け込み寺</h1>
+    <p class="subtitle">ENGLISH SANCTUARY</p>
+    <div class="main-content">
+      <button class="cta-button">始める</button>
+    </div>
+  </div>
+  
+  <!-- ナビゲーション -->
+  <div class="nav">
+    <button class="active" onclick="showSample(1)"></button>
+    <button onclick="showSample(2)"></button>
+    <button onclick="showSample(3)"></button>
+    <button onclick="showSample(4)"></button>
+    <button onclick="showSample(5)"></button>
+  </div>
+  
+  <script>
+    function showSample(num) {
+      // すべてのサンプルを非表示
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById('sample' + i).style.display = 'none';
+      }
+      // 選択されたサンプルを表示
+      document.getElementById('sample' + num).style.display = 'flex';
+      
+      // ナビゲーションボタンの状態を更新
+      const buttons = document.querySelectorAll('.nav button');
+      buttons.forEach((btn, index) => {
+        btn.classList.toggle('active', index === num - 1);
+      });
+    }
+  </script>
+</body>
+</html>
