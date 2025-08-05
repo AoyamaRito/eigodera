@@ -4,7 +4,7 @@
 
 const lessonId = Astro.url.searchParams.get('lesson') || '1';
 
-// 英作文課題データ
+// 英作文課題データ（7問で1単元）
 const writingTasks = {
   1: [
     {
@@ -26,7 +26,35 @@ const writingTasks = {
       japanese: "この本はとても面白かったです。",
       hints: ["This book", "very interesting", "was"],
       level: "初級",
+      points: 10
+    },
+    {
+      id: 4,
+      japanese: "明日は雨が降るでしょう。",
+      hints: ["tomorrow", "rain", "will"],
+      level: "初級",
+      points: 10
+    },
+    {
+      id: 5,
+      japanese: "私は毎日英語を勉強しています。",
+      hints: ["every day", "study", "English"],
+      level: "初級",
       points: 15
+    },
+    {
+      id: 6,
+      japanese: "彼女は医者になりたいです。",
+      hints: ["She", "wants to be", "doctor"],
+      level: "初級",
+      points: 15
+    },
+    {
+      id: 7,
+      japanese: "この料理はとてもおいしいです。",
+      hints: ["This dish", "very", "delicious"],
+      level: "初級",
+      points: 10
     }
   ],
   2: [
@@ -43,22 +71,41 @@ const writingTasks = {
       hints: ["want to", "be able to", "speak English"],
       level: "初級",
       points: 15
-    }
-  ],
-  3: [
-    {
-      id: 1,
-      japanese: "私は5年間東京に住んでいます。",
-      hints: ["I have", "lived in", "for 5 years"],
-      level: "中級",
-      points: 20
     },
     {
-      id: 2,
+      id: 3,
+      japanese: "私は5年間東京に住んでいます。",
+      hints: ["I have", "lived in", "for 5 years"],
+      level: "初級",
+      points: 15
+    },
+    {
+      id: 4,
       japanese: "もし時間があれば、あなたを手伝います。",
       hints: ["If I have time", "I will help you"],
       level: "中級",
       points: 20
+    },
+    {
+      id: 5,
+      japanese: "週末は友達とテニスをします。",
+      hints: ["weekend", "play tennis", "with friends"],
+      level: "初級",
+      points: 15
+    },
+    {
+      id: 6,
+      japanese: "新しいスマートフォンを買うつもりです。",
+      hints: ["going to", "buy", "new smartphone"],
+      level: "初級",
+      points: 15
+    },
+    {
+      id: 7,
+      japanese: "彼はいつも遅刻します。",
+      hints: ["He", "always", "late"],
+      level: "初級",
+      points: 10
     }
   ]
 };
@@ -661,6 +708,8 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
       spinner.style.display = 'inline-block';
       
       try {
+        console.log('Evaluating:', { taskId, japaneseText, userAnswer });
+        
         // 評価APIを呼び出し
         const response = await fetch('/api/evaluate', {
           method: 'POST',
@@ -675,7 +724,9 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
           })
         });
         
+        console.log('Response status:', response.status);
         const result = await response.json();
+        console.log('Result:', result);
         
         if (result.success) {
           displayResult(taskId, result.evaluation);
@@ -703,11 +754,16 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
             nextTask.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
         } else {
-          throw new Error(result.error || 'Evaluation failed');
+          throw new Error(result.error || result.details || 'Evaluation failed');
         }
       } catch (error) {
         console.error('Evaluation error:', error);
-        alert('評価中にエラーが発生しました。もう一度お試しください。');
+        // より詳細なエラーメッセージ
+        if (error.message.includes('API key')) {
+          alert('APIキーが設定されていません。環境変数 GEMINI_API_KEY を設定してください。');
+        } else {
+          alert(`評価中にエラーが発生しました: ${error.message}`);
+        }
       } finally {
         button.disabled = false;
         spinner.style.display = 'none';
