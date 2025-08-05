@@ -626,10 +626,9 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
     </main>
   </div>
   
-  <script>
+  <script define:vars={{ taskData: currentTasks }}>
     let completedTasks = 0;
     let totalPoints = 0;
-    const taskData = ${JSON.stringify(currentTasks)};
     
     // ヒントの表示/非表示
     function toggleHints(taskId) {
