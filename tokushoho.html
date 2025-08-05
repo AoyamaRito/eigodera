@@ -29,6 +29,18 @@
       background: var(--white);
       color: var(--navy);
       line-height: 1.8;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--white);
+      z-index: -1;
     }
     
     .container {
@@ -39,13 +51,14 @@
     
     /* ヘッダー */
     .header-wrapper {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--pale-navy) 100%);
+      background: var(--white);
       margin-bottom: 30px;
     }
     
     .header {
       max-width: 480px;
       margin: 0 auto;
+      background: var(--navy);
       color: var(--white);
       padding: 30px 20px;
       text-align: center;
