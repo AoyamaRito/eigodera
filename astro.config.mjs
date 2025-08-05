@@ -1,9 +1,13 @@
 import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
 
 // AI-First開発原則に基づく設定
-// 完全静的化でパフォーマンス最適化
+// SSRでAPI機能を有効化
 export default defineConfig({
   output: 'server',
+  adapter: node({
+    mode: 'standalone'
+  }),
   server: {
     port: 3000,
     host: true
