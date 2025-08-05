@@ -1,0 +1,17 @@
+{
+  "name": "eigodera",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "serve": "serve dist -l 8080"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "serve": "^14.2.0"
+  },
+  "devDependencies": {}
+}
