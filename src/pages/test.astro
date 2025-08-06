@@ -1,0 +1,236 @@
+---
+// テストページ：環境変数とアイコンの確認
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>システムテスト - 英語の駆け込み寺</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", "游ゴシック", YuGothic, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    .test-section {
+      background: #f5f5f5;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    .test-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #0F1B3C;
+    }
+    
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .icon-item {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .icon-item img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 10px;
+    }
+    
+    .icon-name {
+      font-size: 12px;
+      color: #666;
+      word-break: break-all;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    
+    .status.ok {
+      background: #27AE60;
+      color: white;
+    }
+    
+    .status.error {
+      background: #E74C3C;
+      color: white;
+    }
+    
+    .env-value {
+      font-family: monospace;
+      background: #f0f0f0;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-left: 10px;
+    }
+    
+    .test-api {
+      margin-top: 20px;
+    }
+    
+    button {
+      background: #D35400;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    button:hover {
+      background: #FFB380;
+    }
+    
+    #apiResult {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>システムテスト</h1>
+  
+  <!-- アイコンテスト -->
+  <div class="test-section">
+    <h2 class="test-title">アイコンファイルテスト</h2>
+    <p>以下のアイコンが表示されているか確認してください：</p>
+    
+    <div class="icon-grid">
+      <div class="icon-item">
+        <img src="/icon/ヘルプ.png" alt="ヘルプ" onerror="this.style.display='none'; this.nextElementSibling.style.color='red'">
+        <div class="icon-name">ヘルプ.png</div>
+      </div>
+      <div class="icon-item">
+        <img src="/icon/青の本.png" alt="青の本" onerror="this.style.display='none'; this.nextElementSibling.style.color='red'">
+        <div class="icon-name">青の本.png</div>
+      </div>
+      <div class="icon-item">
+        <img src="/icon/赤いマグカップ.png" alt="赤いマグカップ" onerror="this.style.display='none'; this.nextElementSibling.style.color='red'">
+        <div class="icon-name">赤いマグカップ.png</div>
+      </div>
+      <div class="icon-item">
+        <img src="/icon/インフォメーション.png" alt="インフォメーション" onerror="this.style.display='none'; this.nextElementSibling.style.color='red'">
+        <div class="icon-name">インフォメーション.png</div>
+      </div>
+      <div class="icon-item">
+        <img src="/icon/新聞.png" alt="新聞" onerror="this.style.display='none'; this.nextElementSibling.style.color='red'">
+        <div class="icon-name">新聞.png</div>
+      </div>
+      <div class="icon-item">
+        <img src="/icon/虫めがね.png" alt="虫めがね" onerror="this.style.display='none'; this.nextElementSibling.style.color='red'">
+        <div class="icon-name">虫めがね.png</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- API設定テスト -->
+  <div class="test-section">
+    <h2 class="test-title">API設定確認</h2>
+    <p>
+      GEMINI_API_KEY: 
+      <span class="env-value">{import.meta.env.GEMINI_API_KEY ? '設定済み' : '未設定'}</span>
+      <span class={`status ${import.meta.env.GEMINI_API_KEY ? 'ok' : 'error'}`}>
+        {import.meta.env.GEMINI_API_KEY ? 'OK' : 'ERROR'}
+      </span>
+    </p>
+    <p>
+      GEMINI_MODEL_NAME: 
+      <span class="env-value">{import.meta.env.GEMINI_MODEL_NAME || 'gemini-2.5-flash (デフォルト)'}</span>
+      <span class="status ok">OK</span>
+    </p>
+    
+    <div class="test-api">
+      <button onclick="testAPI()">APIテストを実行</button>
+      <div id="apiResult"></div>
+    </div>
+  </div>
+  
+  <!-- リンクテスト -->
+  <div class="test-section">
+    <h2 class="test-title">ページリンク</h2>
+    <ul>
+      <li><a href="/">トップページ</a></li>
+      <li><a href="/platform">プラットフォーム</a></li>
+      <li><a href="/lessons">レッスン一覧</a></li>
+      <li><a href="/lesson/1">レッスン1</a></li>
+      <li><a href="/lesson/writing?lesson=1">英作文練習</a></li>
+      <li><a href="/tokushoho">特定商取引法</a></li>
+    </ul>
+  </div>
+  
+  <script>
+    async function testAPI() {
+      const resultDiv = document.getElementById('apiResult');
+      resultDiv.textContent = 'テスト中...';
+      
+      try {
+        // APIステータスチェック
+        const statusResponse = await fetch('/api/evaluate', {
+          method: 'GET'
+        });
+        
+        if (!statusResponse.ok) {
+          throw new Error(`Status check failed: ${statusResponse.status}`);
+        }
+        
+        const statusData = await statusResponse.json();
+        
+        // テスト評価リクエスト
+        const testResponse = await fetch('/api/evaluate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            answer: 'This is a test.',
+            question: 'これはテストです。',
+            lessonType: 'テスト',
+            expectedAnswer: 'This is a test.'
+          })
+        });
+        
+        const testData = await testResponse.json();
+        
+        resultDiv.textContent = `APIステータス: ${statusResponse.ok ? 'OK' : 'ERROR'}\n` +
+                               `モデル: ${statusData.model}\n` +
+                               `評価テスト: ${testData.success ? 'OK' : 'ERROR'}\n` +
+                               JSON.stringify(testData, null, 2);
+      } catch (error) {
+        resultDiv.textContent = `エラーが発生しました:\n${error.message}\n\n` +
+                               `考えられる原因:\n` +
+                               `1. GEMINI_API_KEY が設定されていない\n` +
+                               `2. APIキーが無効\n` +
+                               `3. サーバーが起動していない`;
+        resultDiv.style.color = 'red';
+      }
+    }
+  </script>
+</body>
+</html>
