@@ -4,14 +4,21 @@
 export async function POST({ request }) {
   try {
     const { answer, question, lessonType, expectedAnswer } = await request.json();
+    
+    console.log('Evaluation request:', { answer, question, lessonType });
 
     // 環境変数から設定を取得
     const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
     const GEMINI_MODEL_NAME = import.meta.env.GEMINI_MODEL_NAME || 'gemini-2.5-flash';
     
+    console.log('API Key configured:', !!GEMINI_API_KEY);
+    console.log('Model name:', GEMINI_MODEL_NAME);
+    
     if (!GEMINI_API_KEY) {
+      console.error('GEMINI_API_KEY is not configured');
       return new Response(JSON.stringify({
-        error: 'Gemini API key not configured'
+        error: 'Gemini API key not configured',
+        details: 'Please set GEMINI_API_KEY environment variable'
       }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
@@ -86,7 +93,9 @@ export async function POST({ request }) {
     );
 
     if (!geminiResponse.ok) {
-      throw new Error(`Gemini API error: ${geminiResponse.status}`);
+      const errorText = await geminiResponse.text();
+      console.error('Gemini API error:', geminiResponse.status, errorText);
+      throw new Error(`Gemini API error: ${geminiResponse.status} - ${errorText}`);
     }
 
     const geminiData = await geminiResponse.json();
@@ -106,9 +115,24 @@ export async function POST({ request }) {
 
   } catch (error) {
     console.error('Evaluation error:', error);
+    console.error('Error stack:', error.stack);
+    
+    // エラーメッセージをより詳細に
+    let errorMessage = 'Failed to evaluate answer';
+    let errorDetails = error.message;
+    
+    if (error.message.includes('API key')) {
+      errorMessage = 'API key configuration error';
+      errorDetails = 'GEMINI_API_KEY environment variable is not set or invalid';
+    } else if (error.message.includes('fetch')) {
+      errorMessage = 'Network error';
+      errorDetails = 'Failed to connect to Gemini API';
+    }
+    
     return new Response(JSON.stringify({
-      error: 'Failed to evaluate answer',
-      details: error.message
+      error: errorMessage,
+      details: errorDetails,
+      debug: process.env.NODE_ENV === 'development' ? error.stack : undefined
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
