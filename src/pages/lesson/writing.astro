@@ -710,8 +710,9 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
       try {
         console.log('Evaluating:', { taskId, japaneseText, userAnswer });
         
-        // 評価APIを呼び出し
-        const response = await fetch('/api/evaluate', {
+        // 評価APIを呼び出し（デバッグ時はテスト用APIを使用）
+        const apiEndpoint = window.location.search.includes('test=true') ? '/api/evaluate-test' : '/api/evaluate';
+        const response = await fetch(apiEndpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -730,6 +731,11 @@ const currentTasks = writingTasks[lessonId] || writingTasks[1];
         
         if (result.success) {
           displayResult(taskId, result.evaluation);
+          
+          // テストモードの場合は通知
+          if (result.mode === 'test') {
+            console.log('Using test evaluation mode (no Gemini API)');
+          }
           
           // タスク完了処理
           const taskCard = document.getElementById(`task-${taskId}`);
